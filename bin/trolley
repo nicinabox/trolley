@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 import os
-import requests
+import urllib2
+import json
 from sys import argv
 
 host    = 'http://boxcar-addons-staging.herokuapp.com'
@@ -40,8 +41,8 @@ def get_package_data(name, version = False):
   if version:
     path += '/' + version
 
-  response = requests.get(host + path)
-  return response.json()
+  response = urllib2.urlopen(host + path)
+  return json.load(response)
 
 def search():
   packages = get_package_data(package_name)
