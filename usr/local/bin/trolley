@@ -23,6 +23,10 @@ else:
   print "trolley list                    # List installed packages"
   exit()
 
+def get_package_data(path):
+  response = urllib2.urlopen(host + path)
+  return json.load(response)
+
 def install():
   print "Getting package data"
   package = get_package_data('/packages/' + package_name + '/' + package_version)
@@ -41,15 +45,16 @@ def install():
 def remove():
   os.system('removepkg ' + package_name)
 
-def get_package_data(path):
-  response = urllib2.urlopen(host + path)
-  return json.load(response)
-
 def search():
   packages = get_package_data('/packages/search?q=' + package_name)
 
   if packages:
     for p in packages:
       print p['name'] + " (" + ', '.join(p['versions']) + ")"
+
+def list():
+  installed_packages = os.listdir('/var/log/packages/')
+  for package in installed_packages:
+    print package
 
 exec(command + '()')
