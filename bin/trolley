@@ -1,0 +1,54 @@
+#!/usr/bin/env python
+
+import os
+import requests
+from sys import argv
+
+host    = 'http://boxcar-addons-staging.herokuapp.com'
+command = ''
+package_name    = ''
+package_version = ''
+
+# Get input
+if len(argv) == 4:
+  script, command, package_name, package_version = argv
+elif len(argv) == 3:
+  script, command, package_name = argv
+else:
+  print "trolley install NAME [VERSION]"
+  print "trolley search NAME"
+  exit()
+
+def install():
+  package = get_package_data(package_name, package_version)
+
+  if not package_version:
+    package = package[0]
+
+  # Download package
+  os.system('wget -q http://slackware.cs.utah.edu/pub/slackware/' + package['path'])
+
+  # Install package
+  os.system('installpkg ' + package_name)
+
+def remove():
+  os.system('removepkg ' + package_name)
+
+def get_package_data(name, version = False):
+  path = '/packages/' + name
+
+  if version:
+    path += '/' + version
+
+  response = requests.get(host + path)
+  return response.json()
+
+def search():
+  packages = get_package_data(package_name)
+  versions = [p['version'] for p in packages]
+
+  if packages:
+    print package_name + " (" + ', '.join(versions) + ")"
+
+
+exec(command + '()')
