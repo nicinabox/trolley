@@ -21,35 +21,33 @@ else:
   exit()
 
 def install():
-  package = get_package_data(package_name, package_version)
+  print "Getting package data"
+  package = get_package_data('/packages/' + package_name + '/' + package_version)
 
   if not package_version:
     package = package[0]
 
   # Download package
+  print "Downloading"
   os.system('wget -q http://slackware.cs.utah.edu/pub/slackware/' + package['path'])
 
   # Install package
+  print "Installing"
   os.system('installpkg ' + package_name)
 
 def remove():
   os.system('removepkg ' + package_name)
 
-def get_package_data(name, version = False):
-  path = '/packages/' + name
-
-  if version:
-    path += '/' + version
-
+def get_package_data(path):
   response = urllib2.urlopen(host + path)
   return json.load(response)
 
 def search():
-  packages = get_package_data(package_name)
-  versions = [p['version'] for p in packages]
+  packages = get_package_data('/packages/search?q=' + package_name)
 
   if packages:
-    print package_name + " (" + ', '.join(versions) + ")"
+    for p in packages:
+      print p['name'] + " (" + ', '.join(p['versions']) + ")"
 
 
 exec(command + '()')
