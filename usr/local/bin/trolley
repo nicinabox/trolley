@@ -17,9 +17,10 @@ elif len(argv) == 3:
   script, command, package_name = argv
 else:
   print "Usage:"
-  print "trolley install NAME [VERSION]"
-  print "trolley remove NAME"
-  print "trolley search NAME"
+  print "trolley install NAME [VERSION]  # Install a package by name. Version optional"
+  print "trolley remove NAME             # Remove installed package"
+  print "trolley search NAME             # Search for package. May be a fragment."
+  print "trolley list                    # List installed packages"
   exit()
 
 def install():
