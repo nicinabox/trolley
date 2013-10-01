@@ -16,7 +16,9 @@ if len(argv) == 4:
 elif len(argv) == 3:
   script, command, package_name = argv
 else:
+  print "Usage:"
   print "trolley install NAME [VERSION]"
+  print "trolley remove NAME"
   print "trolley search NAME"
   exit()
 
@@ -48,6 +50,5 @@ def search():
   if packages:
     for p in packages:
       print p['name'] + " (" + ', '.join(p['versions']) + ")"
-
 
 exec(command + '()')
