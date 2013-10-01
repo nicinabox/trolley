@@ -33,7 +33,7 @@ def install():
 
   # Install package
   print "Installing"
-  os.system('installpkg ' + package['name'])
+  os.system('installpkg ' + package['package_name'])
 
 def remove():
   os.system('removepkg ' + package_name)
