@@ -24,12 +24,8 @@ def install(args):
   if not args.version:
     package = package[0]
 
-  # Download package
   print "Downloading " + package['name']
   os.system('wget -q http://slackware.cs.utah.edu/pub/slackware/' + package['path'])
-
-  # Install package
-  print "Installing"
   os.system('installpkg ' + package['package_name'])
 
 def remove(args):
