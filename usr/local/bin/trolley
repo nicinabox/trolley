@@ -10,22 +10,29 @@ command = ''
 package_name    = ''
 package_version = ''
 
-# Get input
-if len(argv) == 4:
-  script, command, package_name, package_version = argv
-elif len(argv) == 3:
-  script, command, package_name = argv
-else:
-  print "Usage:"
-  print "trolley install NAME [VERSION]  # Install a package by name. Version optional"
-  print "trolley remove NAME             # Remove installed package"
-  print "trolley search NAME             # Search for package. May be a fragment."
-  print "trolley list                    # List installed packages"
-  exit()
-
 def get_package_data(path):
   response = urllib2.urlopen(host + path)
   return json.load(response)
+
+def usage():
+  # print "Usage:"
+  # print "trolley install NAME [VERSION]  # Install a package by name. Version optional"
+  # print "trolley remove NAME             # Remove installed package"
+  # print "trolley search NAME             # Search for package. May be a fragment"
+  # print "trolley list                    # List installed packages"
+  # print ""
+  print """
+  Usage:
+  install NAME [VERSION]  # Install a package by name. Version optional
+  remove NAME             # Remove installed package
+  search NAME             # Search for package. May be a fragment
+  list                    # List installed packages
+
+  Examples:
+  trolley install python 2.7.3
+  trolley search openssl
+  trolley list
+  """
 
 def install():
   print "Getting package data"
@@ -56,5 +63,14 @@ def list():
   installed_packages = os.listdir('/var/log/packages/')
   for package in installed_packages:
     print package
+
+# Get input
+if len(argv) == 4:
+  script, command, package_name, package_version = argv
+elif len(argv) == 3:
+  script, command, package_name = argv
+else:
+  usage()
+  exit()
 
 exec(command + '()')
