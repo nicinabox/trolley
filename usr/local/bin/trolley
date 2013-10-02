@@ -5,7 +5,7 @@ import argparse
 import urllib2
 import json
 
-__version__ = '0.1.1'
+__version__ = '0.1.2'
 host        = 'http://boxcar-addons-staging.herokuapp.com'
 
 def _get(path):
