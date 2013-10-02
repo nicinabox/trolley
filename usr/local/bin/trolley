@@ -1,59 +1,42 @@
 #!/usr/bin/env python
 
 import os
+import argparse
 import urllib2
 import json
-from sys import argv
 
+__version__ = '0.1.1'
 host    = 'http://boxcar-addons-staging.herokuapp.com'
-command = ''
-package_name    = ''
-package_version = ''
 
-def get_package_data(path):
+def _get(path):
   response = urllib2.urlopen(host + path)
   return json.load(response)
 
-def usage():
-  # print "Usage:"
-  # print "trolley install NAME [VERSION]  # Install a package by name. Version optional"
-  # print "trolley remove NAME             # Remove installed package"
-  # print "trolley search NAME             # Search for package. May be a fragment"
-  # print "trolley list                    # List installed packages"
-  # print ""
-  print """
-  Usage:
-  install NAME [VERSION]  # Install a package by name. Version optional
-  remove NAME             # Remove installed package
-  search NAME             # Search for package. May be a fragment
-  list                    # List installed packages
-
-  Examples:
-  trolley install python 2.7.3
-  trolley search openssl
-  trolley list
-  """
-
-def install():
+def install(args):
   print "Getting package data"
-  package = get_package_data('/packages/' + package_name + '/' + package_version)
+  packages_path = '/packages/' + args.name
 
-  if not package_version:
+  if args.version:
+    packages_path += '/' + args.version
+
+  package = _get(packages_path)
+
+  if not args.version:
     package = package[0]
 
   # Download package
-  print "Downloading"
+  print "Downloading " + package['name']
   os.system('wget -q http://slackware.cs.utah.edu/pub/slackware/' + package['path'])
 
   # Install package
   print "Installing"
   os.system('installpkg ' + package['package_name'])
 
-def remove():
-  os.system('removepkg ' + package_name)
+def remove(args):
+  os.system('removepkg ' + args.name)
 
-def search():
-  packages = get_package_data('/packages/search?q=' + package_name)
+def search(args):
+  packages = _get('/packages/search?q=' + args.name)
 
   if packages:
     print "Package Name (Slackware 14.0, 13.37, 13.1)"
@@ -62,18 +45,59 @@ def search():
       for p in packages:
         print p['name'] + " (" + ', '.join(p['versions']) + ")"
 
-def list():
+def list_packages():
   installed_packages = os.listdir('/var/log/packages/')
   for package in installed_packages:
     print package
 
-# Get input
-if len(argv) == 4:
-  script, command, package_name, package_version = argv
-elif len(argv) == 3:
-  script, command, package_name = argv
-else:
-  usage()
-  exit()
+def update(args):
+  response = urllib2.urlopen('https://api.github.com/repos/nicinabox/trolley/tags')
+  tags = json.load(response)
 
-exec(command + '()')
+  if tags[0]['name'] == __version__:
+     exit('Already on latest')
+  else:
+    filename = 'trolley-{0}-i486-1.tgz'.format(tags[0]['name'])
+    wget = 'wget -q {0} -O 1'.format(tags[0]['tarball_url'], filename)
+    os.system(wget)
+    os.system('installpkg ' + filename)
+
+def main():
+  arger = argparse.ArgumentParser()
+  subparsers = arger.add_subparsers(dest="command")
+
+  arger.add_argument('-v', '--version',
+                      action="version",
+                      version='%(prog)s ' + __version__,
+                      help="Show version")
+
+  # Install
+  install_parser = subparsers.add_parser("install", help="Install a package by name")
+  install_parser.add_argument('name')
+  install_parser.add_argument('version', nargs="?")
+  install_parser.set_defaults(func=install)
+
+  # Remove
+  remove_parser = subparsers.add_parser("remove", help="Remove installed package by name")
+  remove_parser.add_argument('name')
+  remove_parser.set_defaults(func=remove)
+
+  # List
+  list_parser = subparsers.add_parser("list", help="List installed packages")
+  list_parser.set_defaults(func=list_packages)
+
+  # Search
+  search_parser = subparsers.add_parser("search", help="Find a package by name")
+  search_parser.add_argument('name')
+  search_parser.set_defaults(func=search)
+
+  # Update
+  update_parser = subparsers.add_parser("update", help="Update trolley")
+  update_parser.set_defaults(func=update)
+
+  # Parse
+  args = arger.parse_args()
+  args.func(args)
+
+if __name__ == '__main__':
+  main()
