@@ -46,6 +46,32 @@ def list_packages(args):
   for package in installed_packages:
     print package
 
+def info(args):
+  package_path = '/packages/' + args.name
+
+  if args.version:
+    package_path += '/' + args.version
+
+  package = _get(package_path)
+
+  if not args.version:
+    package = package[0]
+
+  print """Name:       {0}
+Version:    {1}
+Arch:       {2}
+Build:      {3}
+Size:       {4} compressed ({5} uncompressed)
+Path:       {6}
+Slackware:  {7}""".format(package['name'],
+                                 package['version'],
+                                 package['arch'],
+                                 package['build'],
+                                 package['size_compressed'],
+                                 package['size_uncompressed'],
+                                 package['path'],
+                                 package['slackware_version'])
+
 def update(args):
   response      = urllib2.urlopen('https://api.github.com/repos/nicinabox/trolley/tags')
   tags          = json.load(response)
@@ -73,6 +99,12 @@ def main():
   install_parser.add_argument('name')
   install_parser.add_argument('version', nargs="?")
   install_parser.set_defaults(func=install)
+
+  # Info
+  install_parser = subparsers.add_parser("info", help="Get info about a package")
+  install_parser.add_argument('name')
+  install_parser.add_argument('version', nargs="?")
+  install_parser.set_defaults(func=info)
 
   # Remove
   remove_parser = subparsers.add_parser("remove", help="Remove installed package by name")
