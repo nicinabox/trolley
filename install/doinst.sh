@@ -15,11 +15,13 @@ if [[ ! `command -v python` ]]; then
 fi
 
 # Install setuptools
-setuptools=https://pypi.python.org/packages/source/s/setuptools/setuptools-1.1.6.tar.gz
-name=`basename $setuptools`
-wget --no-check-certificate $setuptools
-tar xzf $name && cd ${name%.*.*}
-python setup.py install
+if [[ ! `command -v easy_install` ]]; then
+  setuptools=https://pypi.python.org/packages/source/s/setuptools/setuptools-1.1.6.tar.gz
+  name=`basename $setuptools`
+  wget --no-check-certificate $setuptools
+  tar xzf $name && cd ${name%.*.*}
+  python setup.py install
+fi
 
 # Install argparse
 easy_install argparse
