@@ -51,14 +51,13 @@ def update(args):
   tags          = json.load(response)
 
   target        = 'trolley.txz'
-  wget          = 'wget -q {0}'.format(tags[0]['tarball_url'])
   extracted_dir = 'nicinabox-trolley-' + tags[0]['commit']['sha'][:7]
 
-  os.system(wget)
-  os.system('tar xzf ' + tags[0]['name'])
-  os.system('cd ' + extracted_dir + ' && makepkg -c y ../' + target)
-  os.system('installpkg ' + target)
-  os.system('cd ../ && rm -rf ' + extracted_dir)
+  os.system('wget --no-check-certificate -q {0} -O {1}.tar.gz'.format(tags[0]['tarball_url'], tags[0]['name']))
+  os.system('tar xzf {0}.tar.gz'.format(tags[0]['name']))
+  os.system('cd {0} && makepkg -c y ../{1}'.format(extracted_dir, target))
+  os.system('installpkg {0}'.format(target))
+  os.system('rm -rf {0} {1}.tar.gz'.format(extracted_dir, tags[0]['name']))
 
 def main():
   arger = argparse.ArgumentParser()
