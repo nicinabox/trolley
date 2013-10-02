@@ -6,7 +6,7 @@ import urllib2
 import json
 
 __version__ = '0.1.1'
-host    = 'http://boxcar-addons-staging.herokuapp.com'
+host        = 'http://boxcar-addons-staging.herokuapp.com'
 
 def _get(path):
   response = urllib2.urlopen(host + path)
@@ -45,7 +45,7 @@ def search(args):
       for p in packages:
         print p['name'] + " (" + ', '.join(p['versions']) + ")"
 
-def list_packages():
+def list_packages(args):
   installed_packages = os.listdir('/var/log/packages/')
   for package in installed_packages:
     print package
