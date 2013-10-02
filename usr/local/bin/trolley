@@ -56,8 +56,11 @@ def search():
   packages = get_package_data('/packages/search?q=' + package_name)
 
   if packages:
-    for p in packages:
-      print p['name'] + " (" + ', '.join(p['versions']) + ")"
+    print "Package Name (Slackware 14.0, 13.37, 13.1)"
+    print "=========================================="
+    if packages:
+      for p in packages:
+        print p['name'] + " (" + ', '.join(p['versions']) + ")"
 
 def list():
   installed_packages = os.listdir('/var/log/packages/')
