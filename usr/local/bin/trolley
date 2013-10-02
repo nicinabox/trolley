@@ -47,17 +47,19 @@ def list_packages(args):
     print package
 
 def update(args):
-  response = urllib2.urlopen('https://api.github.com/repos/nicinabox/trolley/tags')
-  tags = json.load(response)
+  response      = urllib2.urlopen('https://api.github.com/repos/nicinabox/trolley/tags')
+  tags          = json.load(response)
 
-  target = 'trolley-{0}-i486-1.txz'.format(tags[0]['name'])
-  wget = 'wget -q {0}'.format(tags[0]['tarball_url'])
+  target        = 'trolley-{0}-i486-1.txz'.format(tags[0]['name'])
+  wget          = 'wget -q {0}'.format(tags[0]['tarball_url'])
+  extracted_dir = 'nicinabox-trolley-' + tags[0]['commit']['sha'][:7]
 
   os.system(wget)
   os.system('tar xzf ' + tags[0]['name'])
-  os.system('cd nicinabox-trolley-' + tags[0]['commit']['sha'][:7] )
+  os.system('cd ' + extracted_dir)
   os.system('makepkg -c y ../' + target)
   os.system('installpkg ' + target)
+  os.system('cd ../ && rm -rf ' + extracted_dir)
 
 def main():
   arger = argparse.ArgumentParser()
