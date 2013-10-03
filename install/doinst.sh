@@ -24,3 +24,6 @@ easy_install argparse
 
 # Symlink plz
 cd /usr/local/bin; ln -s trolley plz
+
+# Create dir /boot/extra
+mkdir -p /boot/extra

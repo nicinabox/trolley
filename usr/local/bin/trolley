@@ -35,8 +35,9 @@ def _command_exists(command):
                           stdout=subprocess.PIPE)
   return bool(proc.stdout.read())
 
-def _wget(url):
-  subprocess.call(['wget', '-q', url])
+def _wget(url, options='-q -P /boot/extra'):
+  cmd = 'wget {0} {1}'.format(options, url)
+  subprocess.call(shlex.split(cmd))
 
 def _installpkg(name):
   if _command_exists('installpkg'):
