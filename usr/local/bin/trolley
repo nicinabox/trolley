@@ -1,38 +1,58 @@
 #!/usr/bin/env python
 
 import os
+import subprocess
+import shlex
 import argparse
 import urllib2
 import json
 
-__version__ = '0.1.2'
-host        = 'http://boxcar-addons-staging.herokuapp.com'
+__version__   = '0.1.2'
+addons_host   = 'http://boxcar-addons-staging.herokuapp.com'
+packages_host = 'http://slackware.cs.utah.edu/pub/slackware/'
 
-def _get(path):
-  response = urllib2.urlopen(host + path)
+def _get(url):
+  response = urllib2.urlopen(url)
   return json.load(response)
+
+def _wget(url):
+  subprocess.call(['wget', '-q', url])
+
+def _installpkg(name):
+  subprocess.call(['installpkg', name])
+
+def _removepkg(name):
+  subprocess.call(['removepkg', name])
+
+def _get_package_data(name, version=''):
+  packages_url = addons_host + '/packages/' + name
+
+  if version:
+    packages_url += '/' + version
+
+  package = _get(packages_url)
+
+  if not package:
+    exit("No package named '" + name + "'")
+
+  if not version:
+    package = package[0]
+
+  return package
 
 def install(args):
   print "Getting package data"
-  packages_path = '/packages/' + args.name
-
-  if args.version:
-    packages_path += '/' + args.version
-
-  package = _get(packages_path)
-
-  if not args.version:
-    package = package[0]
+  package = _get_package_data(args.name, args.version)
 
   print "Downloading " + package['name']
-  os.system('wget -q http://slackware.cs.utah.edu/pub/slackware/' + package['path'])
-  os.system('installpkg ' + package['package_name'])
+  _wget(packages_host + package['path'])
+  _installpkg(package['package_name'])
 
 def remove(args):
-  os.system('removepkg ' + args.name)
+  _removepkg(args.name)
 
 def search(args):
-  packages = _get('/packages/search?q=' + args.name)
+  packages = _get(addons_host + '/packages/search?q=' + args.name)
 
   if packages:
     print "Package Name (Slackware 14.0, 13.37, 13.1)"
@@ -47,15 +67,7 @@ def list_packages(args):
     print package
 
 def info(args):
-  package_path = '/packages/' + args.name
-
-  if args.version:
-    package_path += '/' + args.version
-
-  package = _get(package_path)
-
-  if not args.version:
-    package = package[0]
+  package = _get_package_data(args.name, args.version)
 
   print """Name:       {0}
 Version:    {1}
@@ -73,17 +85,22 @@ Slackware:  {7}""".format( package['name'],
                            package['slackware_version'])
 
 def update(args):
-  response      = urllib2.urlopen('https://api.github.com/repos/nicinabox/trolley/tags')
-  tags          = json.load(response)
+  tags = _get('https://api.github.com/repos/nicinabox/trolley/tags')
 
   target        = 'trolley.txz'
   extracted_dir = 'nicinabox-trolley-' + tags[0]['commit']['sha'][:7]
 
-  os.system('wget --no-check-certificate -q {0} -O {1}.tar.gz'.format(tags[0]['tarball_url'], tags[0]['name']))
-  os.system('tar xzf {0}.tar.gz'.format(tags[0]['name']))
-  os.system('cd {0} && makepkg -c y ../{1}'.format(extracted_dir, target))
-  os.system('installpkg {0}'.format(target))
-  os.system('rm -rf {0} {1}.tar.gz'.format(extracted_dir, tags[0]['name']))
+  cmds = {
+    'wget':       'wget --no-check-certificate -q {0} -O {1}.tar.gz'.format(tags[0]['tarball_url'], tags[0]['name']),
+    'untar':      'tar xzf {0}.tar.gz'.format(tags[0]['name']),
+    'makepkg':    'cd {0} && makepkg -c y ../{1}'.format(extracted_dir, target),
+    'installpkg': 'installpkg {0}'.format(target),
+    'cleanup':    'rm -rf {0} {1}.tar.gz'.format(extracted_dir, tags[0]['name'])
+  }
+
+  for cmd in cmds:
+    args = shlex.split(cmds[cmd])
+    subprocess.call(args)
 
 def main():
   arger = argparse.ArgumentParser()
