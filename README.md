@@ -13,11 +13,14 @@ You may need to reopen your terminal session after installing.
 
 ## Usage
 
-    usage: trolley [-h] [-v] {install,remove,list,search,update} ...
+    usage: trolley [-h] [-v] {install,info,remove,list,search,update} ...
+
+    A simple package tool for Slackware, designed for unRAID
 
     positional arguments:
-      {install,remove,list,search,update}
+      {install,info,remove,list,search,update}
         install             Install a package by name
+        info                Get info about a package
         remove              Remove installed package by name
         list                List installed packages
         search              Find a package by name
