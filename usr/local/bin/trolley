@@ -63,14 +63,14 @@ Arch:       {2}
 Build:      {3}
 Size:       {4} compressed ({5} uncompressed)
 Path:       {6}
-Slackware:  {7}""".format(package['name'],
-                                 package['version'],
-                                 package['arch'],
-                                 package['build'],
-                                 package['size_compressed'],
-                                 package['size_uncompressed'],
-                                 package['path'],
-                                 package['slackware_version'])
+Slackware:  {7}""".format( package['name'],
+                           package['version'],
+                           package['arch'],
+                           package['build'],
+                           package['size_compressed'],
+                           package['size_uncompressed'],
+                           package['path'],
+                           package['slackware_version'])
 
 def update(args):
   response      = urllib2.urlopen('https://api.github.com/repos/nicinabox/trolley/tags')
