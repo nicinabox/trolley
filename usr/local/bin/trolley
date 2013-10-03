@@ -121,7 +121,7 @@ def main():
   search_parser.set_defaults(func=search)
 
   # Update
-  update_parser = subparsers.add_parser("update", help="Update trolley")
+  update_parser = subparsers.add_parser("update", help="Update %(prog)s")
   update_parser.set_defaults(func=update)
 
   # Parse
