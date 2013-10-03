@@ -10,6 +10,7 @@ import json
 __version__   = '0.1.2'
 addons_host   = 'http://boxcar-addons-staging.herokuapp.com'
 packages_host = 'http://slackware.cs.utah.edu/pub/slackware/'
+tags_url      = 'https://api.github.com/repos/nicinabox/trolley/tags'
 
 def _get(url):
   response = urllib2.urlopen(url)
@@ -59,7 +60,7 @@ def search(args):
     print "=========================================="
     if packages:
       for p in packages:
-        print p['name'] + " (" + ', '.join(p['versions']) + ")"
+        print '{0} ({1})'.format(p['name'], ', '.join(p['versions']))
 
 def list_packages(args):
   installed_packages = os.listdir('/var/log/packages/')
@@ -85,10 +86,10 @@ Slackware:  {7}""".format( package['name'],
                            package['slackware_version'])
 
 def update(args):
-  tags = _get('https://api.github.com/repos/nicinabox/trolley/tags')
+  tags = _get(tags_url)
 
   target        = 'trolley.txz'
-  extracted_dir = 'nicinabox-trolley-' + tags[0]['commit']['sha'][:7]
+  extracted_dir = 'nicinabox-trolley-{0}'.format(tags[0]['commit']['sha'][:7])
 
   cmds = {
     'wget':       'wget --no-check-certificate -q {0} -O {1}.tar.gz'.format(tags[0]['tarball_url'], tags[0]['name']),
