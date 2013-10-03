@@ -158,10 +158,10 @@ def main():
   install_parser.set_defaults(func=install)
 
   # Info
-  install_parser = subparsers.add_parser("info", help="Get info about a package")
-  install_parser.add_argument('name')
-  install_parser.add_argument('version', nargs="?")
-  install_parser.set_defaults(func=info)
+  info_parser = subparsers.add_parser("info", help="Get info about a package")
+  info_parser.add_argument('name')
+  info_parser.add_argument('version', nargs="?")
+  info_parser.set_defaults(func=info)
 
   # Remove
   remove_parser = subparsers.add_parser("remove", help="Remove installed package by name")
