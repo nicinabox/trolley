@@ -6,6 +6,7 @@ import subprocess
 import shlex
 import urllib2
 import json
+import re
 
 try:
   import argparse
@@ -103,9 +104,22 @@ def search(args):
         print '{0} ({1})'.format(p['name'], ', '.join(p['versions']))
 
 def list_packages(args):
-  installed_packages = os.listdir('/var/log/packages/')
-  for package in installed_packages:
-    print package
+  def _parse_package_name_and_version(package_str):
+    pattern = "([a-zA-Z\-_?]+)-([\w\.]+)-?(i\d86|x86_64|noarch)?-?([\d]+)?"
+    match   = re.search(pattern, package_str)
+    return [match.group(1), match.group(2)]
+
+  def _filter(name, collection):
+    return [i for i in collection if name.lower() in i[0].lower()]
+
+  all_packages = os.listdir('/var/log/packages/')
+  packages = map(_parse_package_name_and_version, all_packages)
+
+  if args.name:
+    packages = _filter(args.name, packages)
+
+  for package in packages:
+    print "{0} ({1})".format(package[0], package[1])
 
 def info(args):
   package = _get_package_data(args.name, args.version)
@@ -171,6 +185,7 @@ def main():
 
   # List
   list_parser = subparsers.add_parser("list", help="List installed packages")
+  list_parser.add_argument('name', nargs="?")
   list_parser.set_defaults(func=list_packages)
 
   # Search
