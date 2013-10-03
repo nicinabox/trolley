@@ -25,3 +25,6 @@ fi
 
 # Install argparse
 easy_install argparse
+
+# Symlink plz
+cd /usr/local/bin; ln -s trolley plz
