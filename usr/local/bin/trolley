@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import os
-import sys
 import subprocess
 import shlex
 import urllib2
@@ -36,7 +35,27 @@ def _command_exists(command):
                           stdout=subprocess.PIPE)
   return bool(proc.stdout.read())
 
-def _wget(url, options='-q -P /boot/extra'):
+def _package_installed(name):
+  return bool(_list_packages(name))
+
+def _list_packages(name):
+  def _parse_package_name_and_version(package_str):
+    pattern = "([a-zA-Z\-_?]+)-([\w\.]+)-?(i\d86|x86_64|noarch)?-?([\d]+)?"
+    match   = re.search(pattern, package_str)
+    return [match.group(1), match.group(2)]
+
+  def _filter(name, collection):
+    return [i for i in collection if name.lower() in i[0].lower()]
+
+  all_packages = os.listdir('/var/log/packages/')
+  packages = map(_parse_package_name_and_version, all_packages)
+
+  if name:
+    packages = _filter(name, packages)
+
+  return packages
+
+def _wget(url, options=''):
   cmd = 'wget {0} {1}'.format(options, url)
   subprocess.call(shlex.split(cmd))
 
@@ -76,17 +95,24 @@ def _check_for_packages_json():
     args         = DummyArgs()
     args.name    = package
     args.version = packages[package]
+    args.verbose = False
 
     install(args)
 
 def install(args):
   if args.name:
-    print "Getting package data"
     package = _get_package_data(args.name, args.version)
 
-    print "Downloading " + package['name']
-    _wget(packages_host + package['path'])
-    _installpkg(package['package_name'])
+    if not _package_installed(package['name']):
+      print "Downloading {0} {1}".format(package['name'], package['version'])
+      wget_options = '-P /boot/extra'
+
+      if not args.verbose:
+        wget_options += ' -q'
+
+      _wget(packages_host + package['path'], wget_options)
+
+      _installpkg(package['package_name'])
   else:
     _check_for_packages_json()
 
@@ -103,20 +129,8 @@ def search(args):
       for p in packages:
         print '{0} ({1})'.format(p['name'], ', '.join(p['versions']))
 
-def list_packages(args):
-  def _parse_package_name_and_version(package_str):
-    pattern = "([a-zA-Z\-_?]+)-([\w\.]+)-?(i\d86|x86_64|noarch)?-?([\d]+)?"
-    match   = re.search(pattern, package_str)
-    return [match.group(1), match.group(2)]
-
-  def _filter(name, collection):
-    return [i for i in collection if name.lower() in i[0].lower()]
-
-  all_packages = os.listdir('/var/log/packages/')
-  packages = map(_parse_package_name_and_version, all_packages)
-
-  if args.name:
-    packages = _filter(args.name, packages)
+def installed_packages(args):
+  packages = _list_packages(args.name)
 
   for package in packages:
     print "{0} ({1})".format(package[0], package[1])
@@ -161,7 +175,8 @@ def main():
   arger = argparse.ArgumentParser(description="A simple package tool for Slackware, designed for unRAID")
   subparsers = arger.add_subparsers(dest="command")
 
-  arger.add_argument('-v', '--version',
+
+  arger.add_argument('-V', '--version',
                       action="version",
                       version='%(prog)s ' + __version__,
                       help="Show version")
@@ -170,6 +185,7 @@ def main():
   install_parser = subparsers.add_parser("install", help="Install a package by name. If no name specified, looks for packages.json in current directory")
   install_parser.add_argument('name', nargs="?")
   install_parser.add_argument('version', nargs="?")
+  install_parser.add_argument('-v', '--verbose', action="store_true")
   install_parser.set_defaults(func=install)
 
   # Info
@@ -186,7 +202,7 @@ def main():
   # List
   list_parser = subparsers.add_parser("list", help="List installed packages")
   list_parser.add_argument('name', nargs="?")
-  list_parser.set_defaults(func=list_packages)
+  list_parser.set_defaults(func=installed_packages)
 
   # Search
   search_parser = subparsers.add_parser("search", help="Find a package by name")
