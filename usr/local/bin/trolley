@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os
+import sys
 import subprocess
 import shlex
 import urllib2
@@ -23,18 +24,27 @@ addons_host   = 'http://boxcar-addons-staging.herokuapp.com'
 packages_host = 'http://slackware.cs.utah.edu/pub/slackware/'
 tags_url      = 'https://api.github.com/repos/nicinabox/trolley/tags'
 
+class DummyArgs: pass
+
 def _get(url):
   response = urllib2.urlopen(url)
   return json.load(response)
+
+def _command_exists(command):
+  proc = subprocess.Popen(['command', '-v', command],
+                          stdout=subprocess.PIPE)
+  return bool(proc.stdout.read())
 
 def _wget(url):
   subprocess.call(['wget', '-q', url])
 
 def _installpkg(name):
-  subprocess.call(['installpkg', name])
+  if _command_exists('installpkg'):
+    subprocess.call(['installpkg', name])
 
 def _removepkg(name):
-  subprocess.call(['removepkg', name])
+  if _command_exists('removepkg'):
+    subprocess.call(['removepkg', name])
 
 def _get_package_data(name, version=''):
   packages_url = addons_host + '/packages/' + name
@@ -52,13 +62,31 @@ def _get_package_data(name, version=''):
 
   return package
 
-def install(args):
-  print "Getting package data"
-  package = _get_package_data(args.name, args.version)
+def _check_for_packages_json():
+  try:
+    f = open('packages.json')
+    packages = json.load(f)
+    f.close()
+  except Exception, e:
+    exit('No packages.json found')
 
-  print "Downloading " + package['name']
-  _wget(packages_host + package['path'])
-  _installpkg(package['package_name'])
+  for package in packages:
+    args         = DummyArgs()
+    args.name    = package
+    args.version = packages[package]
+
+    install(args)
+
+def install(args):
+  if args.name:
+    print "Getting package data"
+    package = _get_package_data(args.name, args.version)
+
+    print "Downloading " + package['name']
+    _wget(packages_host + package['path'])
+    _installpkg(package['package_name'])
+  else:
+    _check_for_packages_json()
 
 def remove(args):
   _removepkg(args.name)
@@ -124,8 +152,8 @@ def main():
                       help="Show version")
 
   # Install
-  install_parser = subparsers.add_parser("install", help="Install a package by name")
-  install_parser.add_argument('name')
+  install_parser = subparsers.add_parser("install", help="Install a package by name. If no name specified, looks for packages.json in current directory")
+  install_parser.add_argument('name', nargs="?")
   install_parser.add_argument('version', nargs="?")
   install_parser.set_defaults(func=install)
 
