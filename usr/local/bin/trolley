@@ -42,12 +42,12 @@ def _list_packages(name):
   def _parse_package_name_and_version(package_str):
     official_matches = re.findall("(.+)-(.+)-(.+)-(.+)", package_str)
 
-    if official_matches and len(official_matches[0]) == 4:
+    if official_matches:
       # [name, version]
       return [official_matches[0][0], official_matches[0][1]]
 
     unofficial_matches = re.findall("(.+)-(.+)", package_str)
-    if unofficial_matches and len(unofficial_matches[0]) == 2:
+    if unofficial_matches:
       # [name, version]
       return [unofficial_matches[0][0], unofficial_matches[0][1]]
     else:
