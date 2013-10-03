@@ -115,7 +115,7 @@ def update(args):
     subprocess.call(args)
 
 def main():
-  arger = argparse.ArgumentParser()
+  arger = argparse.ArgumentParser(description="A simple package tool for Slackware, designed for unRAID")
   subparsers = arger.add_subparsers(dest="command")
 
   arger.add_argument('-v', '--version',
