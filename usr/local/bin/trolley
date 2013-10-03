@@ -40,9 +40,18 @@ def _package_installed(name):
 
 def _list_packages(name):
   def _parse_package_name_and_version(package_str):
-    pattern = "([a-zA-Z\-_?]+)-([\w\.]+)-?(i\d86|x86_64|noarch)?-?([\d]+)?"
-    match   = re.search(pattern, package_str)
-    return [match.group(1), match.group(2)]
+    official_matches = re.findall("(.+)-(.+)-(.+)-(.+)", package_str)
+
+    if official_matches and len(official_matches[0]) == 4:
+      # [name, version]
+      return [official_matches[0][0], official_matches[0][1]]
+
+    unofficial_matches = re.findall("(.+)-(.+)", package_str)
+    if unofficial_matches and len(unofficial_matches[0]) == 2:
+      # [name, version]
+      return [unofficial_matches[0][0], unofficial_matches[0][1]]
+    else:
+      return []
 
   def _filter(name, collection):
     return [i for i in collection if name.lower() in i[0].lower()]
