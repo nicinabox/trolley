@@ -16,7 +16,7 @@ fi
 
 # Install setuptools
 if [[ ! `command -v easy_install` ]]; then
-  curl -kL https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py | python
+  curl -skL https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py | python
 fi
 
 # Install argparse

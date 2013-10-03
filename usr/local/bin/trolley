@@ -10,7 +10,7 @@ try:
   import argparse
 except Exception, e:
   print 'Installing setuptools for Python'
-  setuptools = 'curl -kL https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py | python'
+  setuptools = 'curl -skL https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py | python'
   subprocess.call(shlex.split(setuptools),
                   shell=True,
                   stdout=subprocess.PIPE,
