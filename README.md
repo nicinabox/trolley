@@ -27,7 +27,10 @@ You may need to reopen your terminal session after installing.
       -h, --help            show this help message and exit
       -v, --version         Show version
 
-If you want a package to be installed on reboot, move it to `/boot/extra`.
+Tips
+
+* If you want a package to be installed on reboot, move it to `/boot/extra`.
+* If you do not specify a package version on install, the newest available package will be used. That package will be from Slackware 14.0. **Be Careful**.
 
 ## Examples
 
@@ -41,13 +44,15 @@ Search an exact name
 Search with a name fragment
 
     ~# trolley search open
-    -video-openchrome (0.2.906, 0.2.904)
+    Package Name (Slackware 14.0, 13.37, 13.1)
+    ==========================================
+    -video-openchrome (0.2.906, 0.2.904, 0.2.904)
     openvpn (2.2.2, 2.1.4, 2.1.1)
     openssl-solibs (1.0.1c, 0.9.8r, 0.9.8n)
     openssl (1.0.1c, 0.9.8r, 0.9.8n)
-    openexr (1.7.0, 1.6.1)
+    openexr (1.7.0, 1.7.0, 1.6.1)
     openssh (6.1p1, 5.8p1, 5.5p1)
-    openobex (1.5)
+    openobex (1.5, 1.5, 1.5)
     openldap-client (2.4.31, 2.4.23, 2.4.21)
 
 Install a package
@@ -71,3 +76,10 @@ Install a package
     Executing install script for git-1.7.12.1-i486-1.txz.
     Package git-1.7.12.1-i486-1.txz installed.
 
+## Known Issues
+
+Trolley relies on Python's setuptools. They will not be installed on reboot.
+
+## License
+
+MIT. See LICENSE.txt
