@@ -76,10 +76,6 @@ Install a package
     Executing install script for git-1.7.12.1-i486-1.txz.
     Package git-1.7.12.1-i486-1.txz installed.
 
-## Known Issues
-
-Trolley relies on Python's setuptools. They will not be installed on reboot.
-
 ## License
 
 MIT. See LICENSE.txt
