@@ -40,24 +40,26 @@ def _package_installed(name):
 
 def _list_packages(name):
   def _parse_package_name_and_version(package_str):
+    packages = []
+
     official_matches = re.findall("(.+)-(.+)-(.+)-(.+)", package_str)
+    unofficial_matches = re.findall("(.+)-(.+)", package_str)
 
     if official_matches:
       # [name, version]
-      return [official_matches[0][0], official_matches[0][1]]
+      packages = [official_matches[0][0], official_matches[0][1]]
 
-    unofficial_matches = re.findall("(.+)-(.+)", package_str)
-    if unofficial_matches:
+    elif unofficial_matches:
       # [name, version]
-      return [unofficial_matches[0][0], unofficial_matches[0][1]]
-    else:
-      return []
+      packages = [unofficial_matches[0][0], unofficial_matches[0][1]]
+
+    return packages
 
   def _filter(name, collection):
-    return [i for i in collection if name.lower() in i[0].lower()]
+    return [p for p in collection if name.lower() in p[0].lower()]
 
   all_packages = os.listdir('/var/log/packages/')
-  packages = map(_parse_package_name_and_version, all_packages)
+  packages = filter(None, map(_parse_package_name_and_version, all_packages))
 
   if name:
     packages = _filter(name, packages)
