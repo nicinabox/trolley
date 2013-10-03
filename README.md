@@ -32,7 +32,7 @@ You may need to reopen your terminal session after installing.
 
 Tips
 
-* If you want a package to be installed on reboot, move it to `/boot/extra`.
+* If you do not want a package to be installed on reboot, remove it from `/boot/extra`.
 * If you do not specify a package version on install, the newest available package will be used. That package will be from Slackware 14.0. **Be Careful**.
 
 ## Examples
