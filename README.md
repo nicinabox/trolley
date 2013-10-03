@@ -61,7 +61,7 @@ Search with a name fragment
 Install a package
 
     ~# trolley install git
-    Downloading package data
+    Downloading git 1.7.12.1
     Verifying package git-1.7.12.1-i486-1.txz.
     Installing package git-1.7.12.1-i486-1.txz:
     PACKAGE DESCRIPTION:
@@ -78,6 +78,18 @@ Install a package
     #
     Executing install script for git-1.7.12.1-i486-1.txz.
     Package git-1.7.12.1-i486-1.txz installed.
+
+List installed packages
+
+    ~# trolley list
+    gcc (4.5.2)
+    nano (2.2.4)
+    PlexMediaServer (0.9.7.28.33)
+
+Find an installed package
+
+    ~# trolley list plex
+    PlexMediaServer (0.9.7.28.33)
 
 ## License
 
