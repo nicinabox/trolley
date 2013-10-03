@@ -3,9 +3,20 @@
 import os
 import subprocess
 import shlex
-import argparse
 import urllib2
 import json
+
+try:
+  import argparse
+except Exception, e:
+  print 'Installing setuptools for Python'
+  setuptools = 'curl -kL https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py | python'
+  subprocess.call(shlex.split(setuptools),
+                  shell=True,
+                  stdout=subprocess.PIPE,
+                  stderr=subprocess.STDOUT)
+  subprocess.call(['easy_install', 'argparse'])
+  exit('Please run %(prog)s again')
 
 __version__   = '0.1.2'
 addons_host   = 'http://boxcar-addons-staging.herokuapp.com'
