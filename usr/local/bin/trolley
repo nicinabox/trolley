@@ -37,8 +37,8 @@ def _command_exists(command):
   except:
     return False
 
-def _package_installed(name):
-  return bool(_list_packages(name))
+def _package_installed(name, version):
+  return bool(_list_packages(name, version))
 
 def _raw_installed_packages():
   return os.listdir('/var/log/packages/')
@@ -137,7 +137,7 @@ def install(args):
   if args.name:
     package = _get_package_data(args.name, args.version)
 
-    if not _package_installed(package['name']):
+    if not _package_installed(package['name'], package['version']):
       print "Downloading {0} {1}".format(package['name'], package['version'])
       wget_options = '-P /boot/extra'
 
