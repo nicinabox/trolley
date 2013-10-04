@@ -199,6 +199,9 @@ Slackware:  {7}""".format( package['name'],
 def update(args):
   tags = _get(tags_url)
 
+  if tags[0].name == __version__:
+    exit('Already on ' + tags[0].name)
+
   target        = 'trolley.txz'
   extracted_dir = 'nicinabox-trolley-{0}'.format(tags[0]['commit']['sha'][:7])
 
