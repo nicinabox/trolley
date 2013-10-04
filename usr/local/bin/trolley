@@ -147,7 +147,7 @@ def install(args):
 
       _wget(packages_host + package['path'], wget_options)
 
-      _installpkg(package['package_name'])
+      _installpkg('/boot/extra' + package['package_name'])
   else:
     _check_for_packages_json()
 
