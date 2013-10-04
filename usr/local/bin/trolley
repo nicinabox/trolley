@@ -148,8 +148,7 @@ def install(args):
     _check_for_packages_json()
 
 def remove(args):
-  packages = _list_packages(args.name)
-
+  packages = _list_packages(args.name, args.version)
   for package in packages:
     cmd = 'rm /boot/extra/{0}-{1}*'.format(package[0], package[1])
     _removepkg(package[0])
@@ -236,6 +235,7 @@ def main():
   # Remove
   remove_parser = subparsers.add_parser("remove", help="Remove installed package by name")
   remove_parser.add_argument('name')
+  remove_parser.add_argument('version', nargs="?")
   remove_parser.set_defaults(func=remove)
 
   # List
