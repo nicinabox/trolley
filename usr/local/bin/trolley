@@ -154,7 +154,7 @@ def remove(args):
   packages = _list_packages(args.name, args.version)
   for package in packages:
     cmd = 'rm /boot/extra/{0}-{1}*'.format(package[0], package[1])
-    _removepkg(package[0])
+    _removepkg('{0}-{1}*'.format(package[0], package[1]))
     subprocess.Popen(shlex.split(cmd),
                      stderr=open('/dev/null', 'w'))
 
