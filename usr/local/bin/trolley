@@ -31,10 +31,11 @@ def _get(url):
   return json.load(response)
 
 def _command_exists(command):
-  proc = subprocess.Popen(['command', '-v', command],
-                          stdout=subprocess.PIPE,
-                          shell=True)
-  return bool(proc.stdout.read())
+  try:
+    subprocess.call(['which', command], stdout=subprocess.PIPE)
+    return True
+  except:
+    return False
 
 def _package_installed(name):
   return bool(_list_packages(name))
