@@ -38,7 +38,7 @@ def _command_exists(command):
 def _package_installed(name):
   return bool(_list_packages(name))
 
-def _list_packages(name):
+def _list_packages(name, version=''):
   def _parse_package_name_and_version(package_str):
     packages = []
 
@@ -55,14 +55,34 @@ def _list_packages(name):
 
     return packages
 
-  def _filter(name, collection):
-    return [p for p in collection if name.lower() in p[0].lower()]
+  def _filter_packages(info, collection):
+    packages = []
+    for p in collection:
+      package_candidate = []
+
+      if info['name'].lower() in p[0].lower():
+        package_candidate = p
+
+        if info['version']:
+          query_version = tuple([int(d) for d in info['version'].split('.')])
+          match_version = tuple([int(d) for d in p[1].split('.')])
+          length = len(query_version)
+
+          if query_version == match_version[:length]:
+            package_candidate = p
+          else:
+            package_candidate = []
+
+        if package_candidate:
+          packages.append(package_candidate)
+
+    return packages
 
   all_packages = os.listdir('/var/log/packages/')
   packages = filter(None, map(_parse_package_name_and_version, all_packages))
 
-  if name:
-    packages = _filter(name, packages)
+  if name or version:
+    packages = _filter_packages({ "name": name, "version": version }, packages)
 
   return sorted(packages, key=lambda package: package[0])
 
@@ -146,7 +166,7 @@ def search(args):
         print '{0} ({1})'.format(p['name'], ', '.join(p['versions']))
 
 def installed_packages(args):
-  packages = _list_packages(args.name)
+  packages = _list_packages(args.name, args.version)
 
   for package in packages:
     print "{0} ({1})".format(package[0], package[1])
@@ -218,6 +238,7 @@ def main():
   # List
   list_parser = subparsers.add_parser("list", help="List installed packages")
   list_parser.add_argument('name', nargs="?")
+  list_parser.add_argument('version', nargs="?")
   list_parser.set_defaults(func=installed_packages)
 
   # Search
