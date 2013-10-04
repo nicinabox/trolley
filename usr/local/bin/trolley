@@ -6,6 +6,7 @@ import shlex
 import urllib2
 import json
 import re
+import glob
 
 try:
   import argparse
@@ -153,10 +154,14 @@ def install(args):
 def remove(args):
   packages = _list_packages(args.name, args.version)
   for package in packages:
-    cmd = 'rm /boot/extra/{0}-{1}*'.format(package[0], package[1])
-    _removepkg('{0}-{1}*'.format(package[0], package[1]))
+    globbed_name = glob.glob('/boot/extra/{0}-{1}*'.format(package[0], package[1]))
+    pkg_fullname = os.path.basename(globbed_name[0])
+    cmd = 'rm /boot/extra/{0}'.format(pkg_fullname)
+
     subprocess.Popen(shlex.split(cmd),
                      stderr=open('/dev/null', 'w'))
+
+    _removepkg(pkg_fullname)
 
     print 'Removed {0} {1}'.format(package[0], package[1])
 
