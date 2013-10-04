@@ -73,9 +73,7 @@ def _list_packages(name, version=''):
           match_version = tuple([int(d) for d in p[1].split('.')])
           length = len(query_version)
 
-          if query_version == match_version[:length]:
-            package_candidate = p
-          else:
+          if query_version != match_version[:length]:
             package_candidate = []
 
         if package_candidate:
