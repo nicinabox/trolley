@@ -202,7 +202,7 @@ Slackware:  {7}""".format( package['name'],
 def update(args):
   tags = _get(tags_url)
 
-  if tags[0].name <= __version__:
+  if tags[0]['name'] <= __version__:
     exit('Already on ' + __version__)
 
   target        = 'trolley.txz'
