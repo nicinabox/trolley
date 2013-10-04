@@ -5,9 +5,9 @@ A simple package tool for Slackware, designed for unRAID.
 ## Install
 
     wget -q --no-check-certificate \
-         -O trolley.txz \
+         -O /boot/extra/trolley-0.1.2-noarch-unraid.txz \
          https://github.com/nicinabox/trolley/releases/download/0.1.2/trolley.txz
-    installpkg trolley.txz
+    installpkg /boot/extra/trolley-0.1.2-noarch-unraid.txz
 
 You may need to reopen your terminal session after installing.
 
