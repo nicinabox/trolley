@@ -32,7 +32,8 @@ def _get(url):
 
 def _command_exists(command):
   proc = subprocess.Popen(['command', '-v', command],
-                          stdout=subprocess.PIPE)
+                          stdout=subprocess.PIPE,
+                          shell=True)
   return bool(proc.stdout.read())
 
 def _package_installed(name):
