@@ -64,7 +64,7 @@ def _list_packages(name):
   if name:
     packages = _filter(name, packages)
 
-  return packages
+  return sorted(packages, key=lambda package: package[0])
 
 def _wget(url, options=''):
   cmd = 'wget {0} {1}'.format(options, url)
