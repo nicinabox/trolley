@@ -151,9 +151,12 @@ def remove(args):
   packages = _list_packages(args.name)
 
   for package in packages:
-    cmd = 'cd /boot/extra && rm {0}-{1}*'.format(package[0], package[1])
+    cmd = 'rm /boot/extra/{0}-{1}*'.format(package[0], package[1])
     _removepkg(package[0])
-    subprocess.run(shlex.split(cmd))
+    subprocess.Popen(shlex.split(cmd),
+                     stderr=open('/dev/null', 'w'))
+
+    print 'Removed {0} {1}'.format(package[0], package[1])
 
 def search(args):
   packages = _get(addons_host + '/packages/search?q=' + args.name)
