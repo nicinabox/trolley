@@ -39,6 +39,9 @@ def _command_exists(command):
 def _package_installed(name):
   return bool(_list_packages(name))
 
+def _raw_installed_packages():
+  return os.listdir('/var/log/packages/')
+
 def _list_packages(name, version=''):
   def _parse_package_name_and_version(package_str):
     packages = []
@@ -79,7 +82,7 @@ def _list_packages(name, version=''):
 
     return packages
 
-  all_packages = os.listdir('/var/log/packages/')
+  all_packages = _raw_installed_packages()
   packages = filter(None, map(_parse_package_name_and_version, all_packages))
 
   if name or version:
