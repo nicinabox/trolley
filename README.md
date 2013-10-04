@@ -79,6 +79,12 @@ Install a package
     Executing install script for git-1.7.12.1-i486-1.txz.
     Package git-1.7.12.1-i486-1.txz installed.
 
+Install from packages.json (See Batch Package Installs for more info)
+
+    ~# trolley install
+    Downloading git 1.7.12.1
+    Downloading nano 2.2.4
+
 List installed packages
 
     ~# trolley list
@@ -90,6 +96,24 @@ Find an installed package
 
     ~# trolley list plex
     PlexMediaServer (0.9.7.28.33)
+
+## Batch Package Installs
+
+Trolley supports using a `packages.json` file as a convenient way to specify dependencies for your plugin or project. Only exact version strings are supported (no version constraints).
+
+**Note:** If the user already has a package by the same name installed, the specified package will not be downloaded, even if the existing package is newer or older.
+
+Example:
+
+```json
+{
+  "gcc": "4.5.2",
+  "openssl": "1.0.1c",
+  "nano": "2.2.4"
+}
+```
+
+Then run `trolley install` in the same directory as `packages.json`. Profit.
 
 ## License
 
