@@ -128,7 +128,12 @@ def install(args):
     _check_for_packages_json()
 
 def remove(args):
-  _removepkg(args.name)
+  packages = _list_packages(args.name)
+
+  for package in packages:
+    cmd = 'cd /boot/extra && rm {0}-{1}*'.format(package[0], package[1])
+    _removepkg(package[0])
+    subprocess.run(shlex.split(cmd))
 
 def search(args):
   packages = _get(addons_host + '/packages/search?q=' + args.name)
