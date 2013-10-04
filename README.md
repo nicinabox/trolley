@@ -97,6 +97,27 @@ Find an installed package
     ~# trolley list plex
     PlexMediaServer (0.9.7.28.33)
 
+Remove all packages called curl (assuming curl 7.27.0 and 7.20.1 installed)
+
+    ~# trolley remove curl
+    Removing package /var/log/packages/curl-7.27.0-i486-2...
+    Removing files:
+    ...
+    Removed curl 7.27.0
+
+    Removing package /var/log/packages/curl-7.20.1-i486-1...
+    Removing files:
+    ...
+    Removed curl 7.20.1
+
+Remove a specific package version
+
+    ~# trolley remove curl 7.27.0
+    Removing package /var/log/packages/curl-7.27.0-i486-2...
+    Removing files:
+    ...
+    Removed curl 7.27.0
+
 ## Batch Package Installs
 
 Trolley supports using a `packages.json` file as a convenient way to specify dependencies for your plugin or project. Only exact version strings are supported (no version constraints).
