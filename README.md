@@ -138,4 +138,8 @@ Then run `trolley install` in the same directory as `packages.json`. Profit.
 
 ## License
 
-MIT. See LICENSE.txt
+MIT. See LICENSE.txt for details.
+
+## Development
+
+This app uses [slackpack](https://github.com/nicinabox/slackpack) for packaging.

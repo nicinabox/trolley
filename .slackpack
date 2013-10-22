@@ -1,0 +1,11 @@
+{
+  "name": "trolley",
+  "arch": "noarch",
+  "build": "unraid",
+
+  "ignore": ["install.sh", ".gitignore", "packags.json"],
+  "prefix": {
+    "usr/local": ["bin"],
+    "usr/docs/trolley": ["README.md", "LICENSE.txt"]
+  }
+}
