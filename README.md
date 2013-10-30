@@ -4,7 +4,7 @@ A simple package tool for Slackware, designed for unRAID.
 
 ## Install
 
-    wget -qO- https://raw.github.com/nicinabox/trolley/master/install.sh | sh -
+    wget -qO- --no-check-certificate https://raw.github.com/nicinabox/trolley/master/install.sh | sh -
 
 You may need to reopen your terminal session after installing.
 
