@@ -24,6 +24,7 @@ __version__   = '0.1.4'
 addons_host   = 'http://boxcar-addons-staging.herokuapp.com'
 packages_host = 'http://slackware.cs.utah.edu/pub/slackware/'
 tags_url      = 'https://api.github.com/repos/nicinabox/trolley/tags'
+slackware_versions = [14.0, 13.37, 13.1]
 
 class DummyArgs: pass
 
@@ -169,11 +170,13 @@ def search(args):
   packages = _get(addons_host + '/packages/search?q=' + args.name)
 
   if packages:
-    print "Package Name (Slackware 14.0, 13.37, 13.1)"
-    print "------------------------------------------"
     if packages:
       for p in packages:
-        print '{0} ({1})'.format(p['name'], ', '.join(p['versions']))
+        print '{0}'.format(p['summary'])
+        for i, v in enumerate(p['versions']):
+          print '  Slackware {0}: {1}'.format(slackware_versions[i], v)
+
+        print ''
 
 def installed_packages(args):
   packages = _list_packages(args.name, args.version)
