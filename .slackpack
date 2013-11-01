@@ -3,7 +3,7 @@
   "arch": "noarch",
   "build": "unraid",
 
-  "ignore": ["install.sh", ".gitignore", "packags.json"],
+  "ignore": ["install.sh", ".gitignore", "packages.json"],
   "prefix": {
     "usr/local": ["bin"],
     "usr/docs/trolley": ["README.md", "LICENSE.txt"]
