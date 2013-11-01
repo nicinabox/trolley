@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version=0.1.4
+version=0.1.5
 
 wget -q --no-check-certificate \
      -O /boot/extra/trolley-$version-noarch-unraid.tgz \

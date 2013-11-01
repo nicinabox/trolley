@@ -20,7 +20,7 @@ except Exception, e:
   subprocess.call(['easy_install', 'argparse'])
   exit('Please run %(prog)s again')
 
-__version__   = '0.1.4'
+__version__   = '0.1.5'
 addons_host   = 'http://boxcar-addons-staging.herokuapp.com'
 packages_host = 'http://slackware.cs.utah.edu/pub/slackware/'
 tags_url      = 'https://api.github.com/repos/nicinabox/trolley/tags'
