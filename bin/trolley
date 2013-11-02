@@ -208,8 +208,10 @@ def update(args):
   if tags[0]['name'] <= __version__:
     exit('Already on ' + __version__)
 
-  args = shlex.split('wget -qO- --no-check-certificate https://raw.github.com/nicinabox/trolley/master/install.sh | sh -')
-  subprocess.call(args, shell=True, stdout=subprocess.PIPE)
+  installer = shlex.split('wget -q -O - --no-check-certificate https://raw.github.com/nicinabox/trolley/master/install.sh')
+  executer  = shlex.split('sh -')
+  p0 = subprocess.Popen(installer, stdout=subprocess.PIPE)
+  subprocess.Popen(executer, stdin=p0.stdout, stdout=subprocess.PIPE)
 
 def main():
   arger = argparse.ArgumentParser(description="A simple package tool for Slackware, designed for unRAID")
