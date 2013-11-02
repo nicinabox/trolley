@@ -208,20 +208,8 @@ def update(args):
   if tags[0]['name'] <= __version__:
     exit('Already on ' + __version__)
 
-  target        = 'trolley.txz'
-  extracted_dir = 'nicinabox-trolley-{0}'.format(tags[0]['commit']['sha'][:7])
-
-  cmds = {
-    'wget':       'wget --no-check-certificate -q {0} -O {1}.tar.gz'.format(tags[0]['tarball_url'], tags[0]['name']),
-    'untar':      'tar xzf {0}.tar.gz'.format(tags[0]['name']),
-    'makepkg':    'cd {0} && makepkg -c y ../{1}'.format(extracted_dir, target),
-    'installpkg': 'installpkg {0}'.format(target),
-    'cleanup':    'rm -rf {0} {1}.tar.gz'.format(extracted_dir, tags[0]['name'])
-  }
-
-  for cmd in cmds:
-    args = shlex.split(cmds[cmd])
-    subprocess.call(args)
+  args = shlex.split('wget -qO- --no-check-certificate https://raw.github.com/nicinabox/trolley/master/install.sh | sh -')
+  subprocess.call(args, shell=True, stdout=subprocess.PIPE)
 
 def main():
   arger = argparse.ArgumentParser(description="A simple package tool for Slackware, designed for unRAID")
