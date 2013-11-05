@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version=0.1.6
+version=0.1.7
 
 # Remove old file versions
 rm -rf /boot/extra/trolley*
