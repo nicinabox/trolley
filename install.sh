@@ -2,6 +2,9 @@
 
 version=0.1.7
 
+# Make sure we've got an extras directory
+mkdir -p /boot/extra
+
 # Remove old file versions
 rm -rf /boot/extra/trolley*
 
