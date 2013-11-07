@@ -3,6 +3,7 @@
 import os
 import subprocess
 import shlex
+import urllib
 import urllib2
 import json
 import re
@@ -167,7 +168,8 @@ def remove(args):
     print 'Removed {0} {1}'.format(package[0], package[1])
 
 def search(args):
-  packages = _get(addons_host + '/packages/search?q=' + args.name)
+  query = urllib.quote(args.name)
+  packages = _get(addons_host + '/packages/search?q=' + query)
 
   if packages:
     if packages:
