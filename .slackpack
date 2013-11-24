@@ -1,7 +1,6 @@
 {
   "name": "trolley",
-  "arch": "noarch",
-  "build": "unraid",
+  "version": "0.1.9",
 
   "ignore": ["install.sh", ".gitignore", "packages.json"],
   "prefix": {
