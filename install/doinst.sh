@@ -21,15 +21,15 @@ if [[ ! `command -v python` ]]; then
     installpkg $name
     mv $name /boot/extra
   fi
-
-  # Install setuptools
-  if [[ ! `command -v easy_install` ]]; then
-    curl -skL https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py | python
-  fi
-
-  # Install argparse
-  easy_install argparse
 fi
+
+# Install setuptools
+if [[ ! `command -v easy_install` ]]; then
+  curl -skL https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py | python
+fi
+
+# Install argparse
+easy_install argparse
 
 # Symlink plz
 cd /usr/local/bin; ln -s trolley plz
