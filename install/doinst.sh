@@ -7,14 +7,14 @@ mkdir -p /boot/extra
 if [[ ! `command -v curl` ]]; then
 
   # Will it be installed?
-  if [ ! -f '/boot/extra/curl*' ]; then
+  if [ ! -e /boot/extra/curl* ]; then
     wget -qO- http://boxcar.nicinabox.com/install_curl | sh -
   fi
 fi
 
 # Install python 2.6.6, if needed
 if [[ ! `command -v python` ]]; then
-  if [ ! -f '/boot/extra/python*' ]; then
+  if [ ! -e /boot/extra/python* ]; then
     python_url=http://slackware.cs.utah.edu/pub/slackware/slackware-13.37/slackware/d/python-2.6.6-i486-1.txz
     name=`basename $python_url`
     wget $python_url
