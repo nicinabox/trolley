@@ -13,13 +13,13 @@ try:
   import argparse
 except Exception, e:
   print 'Installing setuptools for Python'
-  setuptools = 'curl -skL https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py | python'
-  subprocess.call(shlex.split(setuptools),
-                  shell=True,
-                  stdout=subprocess.PIPE,
-                  stderr=subprocess.STDOUT)
-  subprocess.call(['easy_install', 'argparse'])
-  exit('Please run %(prog)s again')
+  setuptools = 'curl -skL https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py'
+  p1 = subprocess.Popen(setuptools,
+                        shell=True,
+                        stdout=subprocess.PIPE)
+  p2 = subprocess.Popen('python && easy_install argparse', stdin=p1.stdout, shell=True)
+  p2.wait()
+  exit('Please run trolley again')
 
 __version__   = '0.1.9'
 addons_host   = 'http://boxcar-addons-staging.herokuapp.com'
