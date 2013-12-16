@@ -108,7 +108,7 @@ def _get_package_data(name, version=''):
   packages_url = addons_host + '/packages/' + name
 
   if version:
-    packages_url += '/' + version
+    packages_url += '/' + urllib.quote(version)
 
   package = _get(packages_url)
 

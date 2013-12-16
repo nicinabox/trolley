@@ -2,7 +2,7 @@
   "name": "trolley",
   "version": "0.1.9",
 
-  "ignore": ["install.sh", ".gitignore", "packages.json"],
+  "ignore": ["install.sh"],
   "prefix": {
     "usr/local": ["bin"],
     "usr/docs/trolley": ["README.md", "LICENSE.txt"]
