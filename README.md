@@ -140,3 +140,7 @@ MIT. See LICENSE.txt for details.
 ## Development
 
 This app uses [slackpack](https://github.com/nicinabox/slackpack) for packaging.
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/nicinabox/trolley/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
