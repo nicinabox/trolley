@@ -138,7 +138,15 @@ def _check_for_packages_json():
 
 def install(args):
   if args.name:
-    package = _get_package_data(args.name, args.version)
+    if 'http' in args.name:
+      package = {
+        "url": args.name,
+        "package_name": os.path.basename(args.name),
+        "name": re.sub("\.\w{3}", "", os.path.basename(args.name)),
+        "version": ''
+      }
+    else:
+      package = _get_package_data(args.name, args.version)
 
     if not _package_installed(package['name'], package['version']):
       print "Downloading {0} {1}".format(package['name'], package['version'])
@@ -147,9 +155,14 @@ def install(args):
       if not args.verbose:
         wget_options += ' -q'
 
-      _wget(packages_host + package['path'], wget_options)
+      if 'url' in package:
+        _wget(package['url'], wget_options)
+      else:
+        _wget(packages_host + package['path'], wget_options)
 
       _installpkg('/boot/extra/' + package['package_name'])
+    else:
+      print package['name'] + " already installed"
   else:
     _check_for_packages_json()
 
