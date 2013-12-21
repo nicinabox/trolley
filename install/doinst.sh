@@ -32,4 +32,4 @@ fi
 easy_install argparse
 
 # Symlink plz
-cd /usr/local/bin; ln -s trolley plz
+cd /usr/local/bin; ln -fs trolley plz
