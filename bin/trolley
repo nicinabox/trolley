@@ -21,7 +21,7 @@ except Exception, e:
   p2.wait()
   exit('Please run trolley again')
 
-__version__   = '0.1.10'
+__version__   = '0.1.11'
 addons_host   = 'http://boxcar-addons-staging.herokuapp.com'
 packages_host = 'http://slackware.cs.utah.edu/pub/slackware/'
 tags_url      = 'https://api.github.com/repos/nicinabox/trolley/tags'
@@ -150,7 +150,7 @@ def install(args):
 
     if not _package_installed(package['name'], package['version']):
       print "Downloading {0} {1}".format(package['name'], package['version'])
-      wget_options = '-P /boot/extra'
+      wget_options = '--no-check-certificate -P /boot/extra'
 
       if not args.verbose:
         wget_options += ' -q'
