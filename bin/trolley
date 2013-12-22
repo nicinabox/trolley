@@ -162,7 +162,8 @@ def install(args):
 
       _installpkg('/boot/extra/' + package['package_name'])
     else:
-      print 'Using ' + package['name']
+      print 'Using {0} ({1})'.format(package['name'], package['version'])
+
   else:
     _check_for_packages_json()
 
