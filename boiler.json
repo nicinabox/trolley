@@ -1,6 +1,7 @@
 {
   "name": "trolley",
   "version": "0.1.11",
+  "description": "A simple package tool for Slackware, designed for unRAID."
 
   "ignore": ["install.sh"],
   "prefix": {
