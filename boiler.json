@@ -5,12 +5,6 @@
   "authors": [
     "Nic Aitch <nic@nicinabox.com>"
   ],
-
   "license": "MIT",
-
-  "ignore": ["install.sh"],
-  "prefix": {
-    "usr/local": ["bin"],
-    "usr/docs/trolley": ["README.md", "LICENSE.txt"]
-  }
+  "ignore": ["install.sh"]
 }
