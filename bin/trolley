@@ -13,11 +13,11 @@ try:
   import argparse
 except Exception, e:
   print 'Installing setuptools for Python'
-  setuptools = 'curl -skL https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py'
+  setuptools = 'wget --no-check-certificate -O- https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py'
   p1 = subprocess.Popen(setuptools,
                         shell=True,
                         stdout=subprocess.PIPE)
-  p2 = subprocess.Popen('python && easy_install argparse', stdin=p1.stdout, shell=True)
+  p2 = subprocess.Popen('python - --insecure && easy_install argparse', stdin=p1.stdout, shell=True)
   p2.wait()
   exit('Please run trolley again')
 
