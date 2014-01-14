@@ -25,7 +25,10 @@ fi
 
 # Install setuptools
 if [[ ! `command -v easy_install` ]]; then
-  wget --no-check-certificate -O- https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py | python - --insecure
+  wget --no-check-certificate \
+       -O- \
+       https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py \
+       | python - --insecure
 fi
 
 # Install argparse
