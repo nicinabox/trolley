@@ -1,0 +1,55 @@
+#!/bin/bash
+# Usage fetchpkg -p /slackware/d/python-2.6.6-i486-1.txz -s 13.37 -i
+
+while getopts "p:s:i" opt; do
+  case "$opt" in
+    p)  path=$OPTARG
+        ;;
+    s)  slackware_version=$OPTARG
+        ;;
+    i)  install=true
+        ;;
+  esac
+done
+
+# Globals
+host=http://slackware.cs.utah.edu/pub/slackware
+target_dir=/boot/extra
+
+# Package data
+url=$host/slackware-$slackware_version$path
+filename=`basename $url`
+name=${filename%.*}
+
+# Installed?
+package_exists=`find $target_dir -name $filename*`
+lib_installed=`find /var/log/packages/ -name $filename*`
+lib_version_installed=`find /var/log/packages/ -name $name`
+
+# Only download if it doesn't exist
+if [[ $package_exists == "" ]]; then
+  echo "Downloading to $target_dir/$filename"
+  mkdir -p $target_dir && cd $_
+  wget -q $url
+fi
+
+# Install if install flag used
+if $install; then
+
+  # Check if we have this version installed
+  if [[ $lib_version_installed != "" ]]; then
+    echo "$name is already installed."
+
+  else
+
+    # Check if we have any versions installed
+    if [[ $lib_installed != "" ]]; then
+      echo "Another version of $name is already installed."
+
+    else
+
+      # Install it
+      installpkg "$target_dir/$filename"
+    fi
+  fi
+fi
