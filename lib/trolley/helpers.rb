@@ -1,5 +1,8 @@
+require 'trolley/hash'
+
 module Trolley
   module Helpers
+    include Trolley::Hash
 
     def installed
       Dir['/var/log/packages/*'].map {|p|

@@ -20,7 +20,10 @@ module Trolley
                     self.class.get("/packages")
                   end
 
-      print_table packages.map {|p| [p['name']] }
+      print_table packages.map {|pkg|
+        pkg = stringify_keys(pkg)
+        [pkg['name']]
+      }
     end
 
     desc "list", "List installed packages"

@@ -14,18 +14,36 @@ describe Trolley::CLI do
 
   describe 'search' do
     it 'returns all packages' do
+      allow(Trolley::CLI).to receive(:get) {
+        [
+          {
+            id: 1,
+            name: 'ConsoleKit'
+          }
+        ]
+      }
+
       output = capture(:stdout) { cli.search() }
-      output.should include <<-out.outdent
+      output.should == <<-out.outdent
         ConsoleKit
-        M2Crypto
-        MPlayer
-        PyQt
-        QScintilla
-        a2ps
       out
     end
 
     it 'returns matching packages' do
+      allow(Trolley::CLI).to receive(:get) {
+        [
+          {
+            id: 1,
+            name: 'openssl'
+          },
+          {
+            id: 2,
+            name: 'openssl-solibs'
+          }
+        ]
+      }
+
+
       output = capture(:stdout) { cli.search('openssl') }
       output.should == <<-out.outdent
         openssl
