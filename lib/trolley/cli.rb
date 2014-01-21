@@ -11,8 +11,13 @@ module Trolley
     format :json
 
     desc "search", "Searches for matching packages"
-    def search(name)
-      packages = self.class.get("/packages?q=#{name}")
+    def search(name = nil)
+      packages =  if name
+                    self.class.get("/packages?q=#{name}")
+                  else
+                    self.class.get("/packages")
+                  end
+
       print_table packages.map {|p| [p['name']] }
     end
 
