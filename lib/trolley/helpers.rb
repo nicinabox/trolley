@@ -20,7 +20,7 @@ module Trolley
     end
 
     def installed? (name)
-      !!packages.find { |p| /#{name.downcase}/ =~ p }
+      !!installed.find { |p| /#{name.downcase}/ =~ p }
     end
 
     def details(package)

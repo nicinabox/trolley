@@ -59,7 +59,7 @@ module Trolley
 
         FileUtils.mkdir_p '/boot/extra'
         File.open("/boot/extra/#{version['file_name']}", "wb") do |f|
-          f.write self.class.get("http://slackware.cs.utah.edu/pub#{version['path']}")
+          f.write HTTParty.get("http://slackware.cs.utah.edu/pub#{version['path']}")
         end
 
         status "Installing"
@@ -68,7 +68,7 @@ module Trolley
           `installpkg /boot/extra/#{version['file_name']}`
         end
 
-        status "Installed"
+        status "Installed", :green
       else
 
         status "No package named #{name}", :yellow
