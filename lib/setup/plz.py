@@ -28,9 +28,11 @@ class Plz(object):
 
   def _installpkg(self):
     if not self._installed():
-      print "Installing {0}".format(self.pkg['package_name'])
+      print "Installing {0}".format(self.pkg['tarball_name'])
       file = self._path([self.target_dir, self.pkg['file_name']])
-      subprocess.call(['installpkg', file])
+
+      FNULL = open(os.devnull, 'w')
+      subprocess.call(['installpkg', file], stdout=FNULL, stderr=subprocess.STDOUT)
 
   def _download(self):
     api = self._path([self.api, self.name])
@@ -42,11 +44,10 @@ class Plz(object):
     local_pkg  = self._path([self.target_dir, self.pkg['file_name']])
 
     if not os.path.isfile(local_pkg):
-      print "Downloading {0}".format(self.pkg['package_name'])
       self._wget(self._path([self.host, self.pkg['path']]))
 
   def _installed(self):
-    return self.pkg['package_name'] in self._raw_installed_packages()
+    return self.pkg['tarball_name'] in self._raw_installed_packages()
 
   def _raw_installed_packages(self):
     return os.listdir('/var/log/packages/')
