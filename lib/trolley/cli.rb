@@ -75,6 +75,14 @@ module Trolley
       end
     end
 
+    desc "remove NAME", "Remove a package"
+    def remove(name)
+      if yes? "Really remove #{name}?"
+        `removepkg #{name}`
+        status "#{name} removed", :green
+      end
+    end
+
     desc "info NAME [VERSION]", "Show package details"
     def info(name, version_string = nil)
       package = self.class.get("/packages/#{name}")
