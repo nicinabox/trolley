@@ -38,13 +38,13 @@ if $install; then
 
   # Check if we have this version installed
   if [[ $lib_version_installed != "" ]]; then
-    echo "$name is already installed."
+    echo "Using $name"
 
   else
 
     # Check if we have any versions installed
     if [[ $lib_installed != "" ]]; then
-      echo "Another version of $name is already installed."
+      echo "Another version of $name is already installed"
 
     else
 
