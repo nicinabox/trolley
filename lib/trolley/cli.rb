@@ -43,11 +43,17 @@ module Trolley
     end
 
     desc "install NAME", "Install a new package"
-    def install(name)
+    def install(name, version_string = nil)
       package = self.class.get("/packages/#{name}")
 
       if package.any?
-        version = package['versions'][0]
+        version = if version_string
+                    package['versions'].select { |v|
+                      v['version'] == version_string
+                    }.last
+                  else
+                    package['versions'].first
+                  end
 
         status "Downloading #{package['name']} (#{version['version']})"
 
@@ -64,6 +70,7 @@ module Trolley
 
         status "Installed"
       else
+
         status "No package named #{name}", :yellow
       end
     end
