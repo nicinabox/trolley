@@ -12,7 +12,7 @@ module Trolley
     base_uri 'http://slackware-packages.herokuapp.com'
     format :json
 
-    desc "search", "Searches for matching packages"
+    desc "search [NAME]", "Searches for matching packages"
     def search(name = nil)
       packages =  if name
                     self.class.get("/packages?q=#{name}")
@@ -26,7 +26,7 @@ module Trolley
       }
     end
 
-    desc "list", "List installed packages"
+    desc "list [NAME]", "List installed packages"
     def list(name = nil)
       packages = installed.map do |p|
         info = details(p)
@@ -39,6 +39,32 @@ module Trolley
         }
       else
         print_table packages
+      end
+    end
+
+    desc "install NAME", "Install a new package"
+    def install(name)
+      package = self.class.get("/packages/#{name}")
+
+      if package.any?
+        version = package['versions'][0]
+
+        status "Downloading #{package['name']} (#{version['version']})"
+
+        FileUtils.mkdir_p '/boot/extra'
+        File.open("/boot/extra/#{version['file_name']}", "wb") do |f|
+          f.write self.class.get("http://slackware.cs.utah.edu/pub#{version['path']}")
+        end
+
+        status "Installing"
+
+        if unraid? and not installed? version['tarball_name']
+          `installpkg /boot/extra/#{version['file_name']}`
+        end
+
+        status "Installed"
+      else
+        status "No package named #{name}", :yellow
       end
     end
 

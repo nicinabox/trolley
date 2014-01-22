@@ -4,6 +4,14 @@ module Trolley
   module Helpers
     include Trolley::Hash
 
+    def status(message, color = nil)
+      say "=> #{message}", color
+    end
+
+    def unraid?
+      /unraid/i =~ `uname -a`
+    end
+
     def installed
       Dir['/var/log/packages/*'].map {|p|
         p.gsub('/var/log/packages/', '')
