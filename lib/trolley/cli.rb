@@ -1,13 +1,14 @@
 require 'rubygems'
 require 'bundler'
+
+require 'trolley/base'
 require 'httparty'
 require 'thor'
-require 'trolley/helpers'
 
 module Trolley
   class CLI < Thor
     include HTTParty
-    include Trolley::Helpers
+    include Trolley::Base
 
     base_uri 'http://slackware-packages.herokuapp.com'
     format :json
@@ -20,9 +21,8 @@ module Trolley
                     self.class.get("/packages")
                   end
 
-      print_table packages.map {|pkg|
-        pkg = stringify_keys(pkg)
-        [pkg['name']]
+      print_in_columns packages.map {|pkg|
+        pkg['name']
       }
     end
 

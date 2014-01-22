@@ -11,11 +11,12 @@ module Trolley
     def unraid?
       /unraid/i =~ `uname -a`
     end
+    module_function :unraid?
 
     def installed
       Dir['/var/log/packages/*'].map {|p|
         p.gsub('/var/log/packages/', '')
-      }
+      }.sort { |a, b| a <=> b }
     end
 
     def installed? (name)

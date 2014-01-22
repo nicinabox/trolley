@@ -15,12 +15,12 @@ describe Trolley::CLI do
   describe 'search' do
     it 'returns all packages' do
       allow(Trolley::CLI).to receive(:get) {
-        [
-          {
-            id: 1,
-            name: 'ConsoleKit'
-          }
-        ]
+        JSON.parse('[
+            {
+              "id": 1,
+              "name": "ConsoleKit"
+            }
+          ]')
       }
 
       output = capture(:stdout) { cli.search() }
@@ -31,23 +31,22 @@ describe Trolley::CLI do
 
     it 'returns matching packages' do
       allow(Trolley::CLI).to receive(:get) {
-        [
+        JSON.parse('[
           {
-            id: 1,
-            name: 'openssl'
+            "id": 1,
+            "name": "openssl"
           },
           {
-            id: 2,
-            name: 'openssl-solibs'
+            "id": 2,
+            "name": "openssl-solibs"
           }
-        ]
+        ]')
       }
 
 
       output = capture(:stdout) { cli.search('openssl') }
       output.should == <<-out.outdent
-        openssl
-        openssl-solibs
+        openssl         openssl-solibs
       out
     end
   end
