@@ -42,7 +42,7 @@ module Trolley
       end
     end
 
-    desc "install NAME", "Install a new package"
+    desc "install NAME [VERSION]", "Install a new package"
     def install(name, version_string = nil)
       package = self.class.get("/packages/#{name}")
 
