@@ -75,5 +75,31 @@ module Trolley
       end
     end
 
+    desc "info NAME [VERSION]", "Show package details"
+    def info(name, version_string = nil)
+      package = self.class.get("/packages/#{name}")
+
+      if version_string
+        version = package['versions'].select {|v| v['version'] == version_string }.last
+        info = [
+          ['Name', package['name']],
+          ['Summary', version['summary']],
+          ['Version', version['version']],
+          ['Arch', version['arch']],
+          ['Build', version['build']],
+          ['Size', "#{version['size_uncompressed']} (#{version['size_compressed']} compressed)"],
+          ['Slackware', version['slackware']],
+          ['Patch', version['patch'] ? "yes" : "no"]
+        ]
+      else
+        info = [
+          ['Name', package['name']],
+          ['Summary', package['versions'].last['summary']],
+          ['Versions', package['versions'].map { |v| v['version'] }.uniq.join(', ')]
+        ]
+      end
+
+      print_table info
+    end
   end
 end

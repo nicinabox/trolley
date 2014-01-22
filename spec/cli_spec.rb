@@ -162,4 +162,37 @@ describe Trolley::CLI do
     end
   end
 
+  describe 'info' do
+    before(:each) do
+      FakeFS.deactivate!
+      FakeFS::FileSystem.clear
+      allow(Trolley::CLI).to receive(:get) {
+        JSON.parse(File.read('spec/support/openssl.json'))
+      }
+    end
+
+    it 'shows package details' do
+      output = capture(:stdout) { cli.info('openssl') }
+      output.should == <<-out.outdent
+        Name      openssl
+        Summary   openssl (Secure Sockets Layer toolkit)
+        Versions  0.9.8n, 0.9.8r, 0.9.8y, 1.0.1c, 1.0.1e, 1.0.1f
+      out
+    end
+
+    it 'shows package details for a version' do
+      output = capture(:stdout) { cli.info('openssl', '0.9.8n') }
+      output.should == <<-out.outdent
+        Name       openssl
+        Summary    openssl (Secure Sockets Layer toolkit)
+        Version    0.9.8n
+        Arch       i486
+        Build      1
+        Size       9492480 (2359296 compressed)
+        Slackware  13.1
+        Patch      no
+      out
+    end
+  end
+
 end
