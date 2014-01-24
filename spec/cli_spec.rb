@@ -160,6 +160,15 @@ describe Trolley::CLI do
         => No package named nope
       out
     end
+
+    context 'with version constraints' do
+      it 'supports >'
+      it 'supports <'
+      it 'supports ='
+      it 'supports ~>'
+      it 'supports >='
+      it 'supports <='
+    end
   end
 
   describe 'info' do

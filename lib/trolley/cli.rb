@@ -1,7 +1,5 @@
-require 'rubygems'
-require 'bundler'
-
 require 'trolley/base'
+require 'trolley/package'
 require 'httparty'
 require 'thor'
 
