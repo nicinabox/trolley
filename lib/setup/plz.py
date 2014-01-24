@@ -18,6 +18,7 @@ class Plz(object):
     self.name     = arg[2]
     self.version  = arg[3]
     self.pkg      = ''
+    self.x64      = sys.maxsize > 2 ** 32
 
   def install(self):
     self._download()
@@ -28,8 +29,8 @@ class Plz(object):
 
   def _installpkg(self):
     if not self._installed():
-      print "Installing {0}".format(self.pkg['tarball_name'])
-      file = self._path([self.target_dir, self.pkg['file_name']])
+      print "Installing {0}".format(self.pkg['file_name'])
+      file = self._path([self.target_dir, self.pkg['package_name']])
 
       FNULL = open(os.devnull, 'w')
       subprocess.call(['installpkg', file], stdout=FNULL, stderr=subprocess.STDOUT)
@@ -38,16 +39,21 @@ class Plz(object):
     api = self._path([self.api, self.name])
     pkg = self._get(api)
 
-    versions = [v for v in pkg['versions'] if v['version'] == self.version]
+    versions = [v for v in pkg['versions'] if v['x64'] == self.x64]
+    versions = [v for v in versions if v['version'] == self.version]
+
+    if not versions:
+      sys.exit("! No match for {0} ({1}) for your architecture.".format(self.name, self.version))
+
     self.pkg = versions[-1]
 
-    local_pkg  = self._path([self.target_dir, self.pkg['file_name']])
+    local_pkg  = self._path([self.target_dir, self.pkg['package_name']])
 
     if not os.path.isfile(local_pkg):
       self._wget(self._path([self.host, self.pkg['path']]))
 
   def _installed(self):
-    return self.pkg['tarball_name'] in self._raw_installed_packages()
+    return self.pkg['file_name'] in self._raw_installed_packages()
 
   def _raw_installed_packages(self):
     return os.listdir('/var/log/packages/')
