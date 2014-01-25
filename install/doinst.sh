@@ -8,10 +8,9 @@ if ! grep -Fxq "source /etc/bundlerc" /etc/profile; then
   echo 'source /etc/bundlerc' >> /etc/profile
 fi
 
-# Bootstrap package dependencies
-fetchpkg -p /slackware/d/python-2.6.6-i486-1.txz -s 13.37 -i
-
 if [[ `uname -m` == "x86_64" ]]; then
+  fetchpkg -p /slackware/d/python-2.7.5-x86_64-1.txz -s 14.1 -i
+
   plz.py install kernel-headers 3.10.17
   plz.py install binutils 2.23.52.0.1
   plz.py install glibc 2.17
@@ -28,6 +27,9 @@ if [[ `uname -m` == "x86_64" ]]; then
   plz.py install git 1.8.4
   plz.py install ruby 1.9.3_p484
 else
+  # Bootstrap package dependencies
+  fetchpkg -p /slackware/d/python-2.6.6-i486-1.txz -s 13.37 -i
+
   plz.py install kernel-headers 2.6.37.6_smp
   plz.py install binutils 2.21.51.0.6
   plz.py install glibc 2.15
