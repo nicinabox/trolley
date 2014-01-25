@@ -1,10 +1,10 @@
 {
   "name": "trolley",
-  "version": "0.2.0",
+  "version": "0.2.0_pre",
   "description": "A simple package tool for Slackware, designed for unRAID.",
   "authors": [
     "Nic Aitch <nic@nicinabox.com>"
   ],
   "license": "MIT",
-  "ignore": ["install.sh"]
+  "ignore": ["install.sh", "spec"]
 }
