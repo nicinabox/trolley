@@ -26,6 +26,8 @@ url=$host/slackware$arch-$slackware_version$path
 filename=`basename $url`
 name=${filename%.*}
 
+mkdir -p $target_dir
+
 # Installed?
 package_exists=`find $target_dir -name $filename*`
 lib_installed=`find /var/log/packages/ -name $filename*`
@@ -34,8 +36,7 @@ lib_version_installed=`find /var/log/packages/ -name $name`
 # Only download if it doesn't exist
 if [[ $package_exists == "" ]]; then
   echo "Downloading to $target_dir/$filename"
-  mkdir -p $target_dir
-  wget -p $url -P $target_dir
+  wget -q $url -P $target_dir
 fi
 
 # Install if install flag used
