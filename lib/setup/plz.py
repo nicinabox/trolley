@@ -17,27 +17,33 @@ class Plz(object):
     self.command  = arg[1]
     self.name     = arg[2]
     self.version  = arg[3]
-    self.pkg      = ''
     self.x64      = sys.maxsize > 2 ** 32
+    self.pkg      = self._package_data()
 
   def install(self):
-    self._download()
     self._installpkg()
-
 
   # Private methods
 
   def _installpkg(self):
     if not self._installed():
       print "Installing {0}".format(self.pkg['file_name'])
+
+      self._download()
       file = self._path([self.target_dir, self.pkg['package_name']])
 
       FNULL = open(os.devnull, 'w')
-      subprocess.call(['upgradepkg', '--install-new', file], stdout=FNULL, stderr=subprocess.STDOUT)
+      subprocess.call(['installpkg', file], stdout=FNULL, stderr=subprocess.STDOUT)
     else:
       print "Using {0}".format(self.pkg['package_name'])
 
   def _download(self):
+    local_pkg  = self._path([self.target_dir, self.pkg['package_name']])
+
+    if not os.path.isfile(local_pkg):
+      self._wget(self._path([self.host, self.pkg['path']]))
+
+  def _package_data(self):
     api = self._path([self.api, self.name])
     pkg = self._get(api)
 
@@ -47,12 +53,7 @@ class Plz(object):
     if not versions:
       sys.exit("! No match for {0} ({1}) for your architecture.".format(self.name, self.version))
 
-    self.pkg = versions[-1]
-
-    local_pkg  = self._path([self.target_dir, self.pkg['package_name']])
-
-    if not os.path.isfile(local_pkg):
-      self._wget(self._path([self.host, self.pkg['path']]))
+    return versions[-1]
 
   def _installed(self):
     return self.pkg['file_name'] in self._installed_packages()
