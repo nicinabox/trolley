@@ -56,3 +56,5 @@ fi
 if [[ `command -v bundle` == "" ]]; then
   gem install bundler
 fi
+
+echo 'Please run `source /etc/bundlerc` or restart your terminal session.'
