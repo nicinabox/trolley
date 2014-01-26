@@ -22,17 +22,10 @@ class Plz(object):
 
   def install(self):
     self._download()
-    self._installpkg_force()
+    self._installpkg()
 
 
   # Private methods
-
-  def _installpkg_force(self):
-    print "Installing {0}".format(self.pkg['file_name'])
-    file = self._path([self.target_dir, self.pkg['package_name']])
-
-    FNULL = open(os.devnull, 'w')
-    subprocess.call(['installpkg', file], stdout=FNULL, stderr=subprocess.STDOUT)
 
   def _installpkg(self):
     if not self._installed():
@@ -40,7 +33,7 @@ class Plz(object):
       file = self._path([self.target_dir, self.pkg['package_name']])
 
       FNULL = open(os.devnull, 'w')
-      subprocess.call(['installpkg', file], stdout=FNULL, stderr=subprocess.STDOUT)
+      subprocess.call(['upgradepkg', '--install-new', file], stdout=FNULL, stderr=subprocess.STDOUT)
     else:
       print "Using {0}".format(self.pkg['package_name'])
 
@@ -62,10 +55,12 @@ class Plz(object):
       self._wget(self._path([self.host, self.pkg['path']]))
 
   def _installed(self):
-    return self.pkg['file_name'] in self._raw_installed_packages()
+    return self.pkg['file_name'] in self._installed_packages()
 
-  def _raw_installed_packages(self):
-    return os.listdir('/var/log/packages/')
+  def _installed_packages(self):
+    packages_list = os.listdir('/var/log/packages/')
+    files_list = [f[:-4] for f in os.listdir('/boot/extra')]
+    return self._common(files_list, packages_list)
 
   def _wget(self, url):
     cmd = 'wget -qP {0} {1}'.format(self.target_dir, url)
@@ -77,6 +72,14 @@ class Plz(object):
 
   def _path(self, list):
     return ('/').join(list)
+
+  def _common(self, a, b):
+    b = set(b)
+    return [aa for aa in a if aa in b]
+
+  def _diff(self, a, b):
+    b = set(b)
+    return [aa for aa in a if aa not in b]
 
 # CLI
 args = sys.argv
