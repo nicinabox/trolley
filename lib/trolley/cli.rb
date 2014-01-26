@@ -11,6 +11,11 @@ module Trolley
     base_uri 'http://slackware-packages.herokuapp.com'
     format :json
 
+    def initialize(*args)
+      super
+      load_env_vars
+    end
+
     desc "search [NAME]", "Searches for matching packages"
     def search(name = nil)
       packages =  if name
@@ -106,6 +111,11 @@ module Trolley
       end
 
       print_table info
+    end
+
+    desc "version", "Show Trolley version"
+    def version
+      puts manifest['version']
     end
   end
 end
