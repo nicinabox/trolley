@@ -22,10 +22,17 @@ class Plz(object):
 
   def install(self):
     self._download()
-    self._installpkg()
+    self._installpkg_force()
 
 
   # Private methods
+
+  def _installpkg_force(self):
+    print "Installing {0}".format(self.pkg['file_name'])
+    file = self._path([self.target_dir, self.pkg['package_name']])
+
+    FNULL = open(os.devnull, 'w')
+    subprocess.call(['installpkg', file], stdout=FNULL, stderr=subprocess.STDOUT)
 
   def _installpkg(self):
     if not self._installed():
@@ -34,6 +41,8 @@ class Plz(object):
 
       FNULL = open(os.devnull, 'w')
       subprocess.call(['installpkg', file], stdout=FNULL, stderr=subprocess.STDOUT)
+    else:
+      print "Using {0}".format(self.pkg['package_name'])
 
   def _download(self):
     api = self._path([self.api, self.name])

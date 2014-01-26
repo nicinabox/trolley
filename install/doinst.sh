@@ -9,7 +9,7 @@ if ! grep -Fxq "source /etc/bundlerc" /etc/profile; then
 fi
 
 if [[ `uname -m` == "x86_64" ]]; then
-  fetchpkg -p /slackware/d/python-2.7.5-x86_64-1.txz -s 14.1 -i
+  fetchpkg -p /slackware64/d/python-2.7.5-x86_64-1.txz -s 14.1 -i
 
   plz.py install kernel-headers 3.10.17
   plz.py install binutils 2.23.52.0.1
