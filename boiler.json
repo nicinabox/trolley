@@ -1,6 +1,6 @@
 {
   "name": "trolley",
-  "version": "0.2.0_pre",
+  "version": "0.2.0_pre2",
   "description": "A simple package tool for Slackware, designed for unRAID.",
   "authors": [
     "Nic Aitch <nic@nicinabox.com>"
