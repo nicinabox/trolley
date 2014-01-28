@@ -31,7 +31,7 @@ module Trolley
 
     desc "list [NAME]", "List installed packages"
     def list(name = nil)
-      packages = installed.map do |p|
+      packages = all_installed.map do |p|
         info = details(p)
         [info[:name], info[:version]]
       end

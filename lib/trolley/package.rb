@@ -7,23 +7,25 @@ module Trolley
     attr_accessor :name, :versions, :version
 
     def initialize(data, target_version_string = nil)
+      @target_version_string = target_version_string
+
       @name           = data['name']
       @versions       = data['versions']
-      @version        = matched_version(target_version_string)
+      @version        = matched_version
     end
 
   private
 
-    def matched_version(target_version_string)
-      target = Gem::Dependency.new(name, target_version_string)
+    def matched_version
+      target = Gem::Dependency.new(name, @target_version_string)
 
       version = versions.select do |v|
         potential = Gem::Dependency.new(name, v['version'])
         target =~ potential and v['x64'] == x64?
       end
 
-      if version.last.nil?
-        raise Exception, "No matching #{arch} version of #{name} #{target_version_string}"
+      if version.empty?
+        raise Exception, "No matching #{arch} version of #{name} #{@target_version_string}"
       else
         version.last
       end
