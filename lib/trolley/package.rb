@@ -15,12 +15,14 @@ module Trolley
   private
 
     def matched_version(target_version_string)
-      version = versions.select { |v|
-        v['version'] == target_version_string
-      }
-      return version.last if version.any?
+      target = Gem::Dependency.new(name, target_version_string)
 
-      versions.last
+      version = versions.select do |v|
+        potential = Gem::Dependency.new(name, v['version'])
+        target =~ potential
+      end
+
+      version.last
     end
 
   end

@@ -3,11 +3,11 @@ require 'trolley/base'
 require 'trolley/package'
 
 describe Trolley::Package do
+  let(:openssl_json) { JSON.parse(File.read('spec/support/openssl.json')) }
+
   context "with no version" do
     before(:each) do
-      @package = Trolley::Package.new(
-        JSON.parse(File.read('spec/support/openssl.json'))
-      )
+      @package = Trolley::Package.new(openssl_json)
     end
 
     it ".name" do
@@ -25,10 +25,7 @@ describe Trolley::Package do
 
   context "with a version" do
     before(:each) do
-      @package = Trolley::Package.new(
-        JSON.parse(File.read('spec/support/openssl.json')),
-        '1.0.1c'
-      )
+      @package = Trolley::Package.new(openssl_json, '1.0.1c')
     end
 
     it ".version" do
@@ -36,17 +33,35 @@ describe Trolley::Package do
     end
   end
 
-  context "with bogus version" do
-    before(:each) do
-      @package = Trolley::Package.new(
-        JSON.parse(File.read('spec/support/openssl.json')),
-        '0.0.0'
-      )
+  context 'with version constraints' do
+    it 'supports >' do
+      package = Trolley::Package.new(openssl_json, '> 0.9.8')
+      package.version['version'].should == '1.0.1f'
     end
 
-    it ".version" do
-      pending
-      @package.should raise_error NoVersionError
+    it 'supports <' do
+      package = Trolley::Package.new(openssl_json, '< 1.0.0')
+      package.version['version'].should == '0.9.8y'
+    end
+
+    it 'supports =' do
+      package = Trolley::Package.new(openssl_json, '= 1.0.1c')
+      package.version['version'].should == '1.0.1c'
+    end
+
+    it 'supports ~>' do
+      package = Trolley::Package.new(openssl_json, '~> 1.0.1c')
+      package.version['version'].should == '1.0.1f'
+    end
+
+    it 'supports >=' do
+      package = Trolley::Package.new(openssl_json, '>= 1.0.1c')
+      package.version['version'].should == '1.0.1f'
+    end
+
+    it 'supports <=' do
+      package = Trolley::Package.new(openssl_json, '<= 1.0.1c')
+      package.version['version'].should == '1.0.1c'
     end
   end
 end
