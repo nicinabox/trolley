@@ -15,7 +15,7 @@ describe Trolley::Package do
     end
 
     it ".versions" do
-      @package.versions.count.should == 8
+      @package.versions.count.should == 10
     end
 
     it ".version" do

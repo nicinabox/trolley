@@ -47,35 +47,30 @@ module Trolley
 
     desc "install NAME [VERSION]", "Install a new package"
     def install(name, version_string = nil)
-      package = self.class.get("/packages/#{name}")
+      pkg = self.class.get("/packages/#{name}")
 
-      if package.any?
-        version = if version_string
-                    package['versions'].select { |v|
-                      v['version'] == version_string
-                    }.last
-                  else
-                    package['versions'].first
-                  end
-
-        status "Downloading #{package['name']} (#{version['version']})"
-
-        FileUtils.mkdir_p '/boot/extra'
-        File.open("/boot/extra/#{version['file_name']}", "wb") do |f|
-          f.write HTTParty.get("http://slackware.cs.utah.edu/pub#{version['path']}")
-        end
-
-        status "Installing"
-
-        if unraid? and not installed? version['tarball_name']
-          `installpkg /boot/extra/#{version['file_name']}`
-        end
-
-        status "Installed", :green
-      else
-
+      unless pkg.any?
         status "No package named #{name}", :yellow
+        return
       end
+
+      package = Trolley::Package.new(pkg, version_string)
+      version = package.version
+
+      status "Downloading #{package.name} (#{version['version']})"
+
+      FileUtils.mkdir_p '/boot/extra'
+      File.open("/boot/extra/#{version['package_name']}", "wb") do |f|
+        f.write HTTParty.get("http://slackware.cs.utah.edu/pub#{version['path']}")
+      end
+
+      status "Installing"
+
+      if unraid? and not installed? version['file_name']
+        `installpkg /boot/extra/#{version['package_name']}`
+      end
+
+      status "Installed", :green
     end
 
     desc "remove NAME", "Remove a package"
