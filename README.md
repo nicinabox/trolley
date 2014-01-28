@@ -2,6 +2,8 @@
 
 A tool for managing official Slackware packages, designed for unRAID.
 
+Compatible with unRAID >5.0
+
 ## Install
 
     wget -qO- --no-check-certificate https://raw.github.com/nicinabox/trolley/master/install.sh | sh -
