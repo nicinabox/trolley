@@ -1,6 +1,6 @@
 # Trolley
 
-A simple package tool for Slackware, designed for unRAID.
+A tool for managing official Slackware packages, designed for unRAID.
 
 ## Install
 
@@ -8,139 +8,110 @@ A simple package tool for Slackware, designed for unRAID.
 
 You may need to reopen your terminal session after installing.
 
+## Why use trolley?
+
+## You need to install dependencies for a plugin
+
+Without trolley, you need to search the web for a package, download it, get it on your unRAID box, install it, and remember to put it in /boot/extra for next time.
+
+With trolley, you can do all that in one go: `trolley install openssl`.
+
+## You need to remove a broken or incompatible package
+
+The common process is to remove it from /boot/extra then run removepkg. You might even have to restart.
+
+With trolley, it's just `trolley remove openssl`. No restart required.
+
+## You need to update existing dependencies
+
+Without trolley: remove from /boot/extra then run removepkg. Maybe restart. Then, search the web for a new version, download it, get it on your unRAID box, install it, and remember to put it in /boot/extra for next time. Woof.
+
+With trolley, it's just `trolley update openssl`.
+
+## You need to install architecture specific versions
+
+If you need a 64-bit package, go through the tedious install process, but be sure to get the x86_64 version and not the i*86 version. Oops, got the wrong one? Do over.
+
+Trolley matches your arch automatically: `trolley install openssl`.
+
 ## Usage
 
-    usage: trolley [-h] [-v] {install,info,remove,list,search,update} ...
-
-    A simple package tool for Slackware, designed for unRAID
-
-    positional arguments:
-      {install,info,remove,list,search,update}
-        install             Install a package by name
-        info                Get info about a package
-        remove              Remove installed package by name
-        list                List installed packages
-        search              Find a package by name
-        update              Update trolley
-
-    optional arguments:
-      -h, --help            show this help message and exit
-      -v, --version         Show version
+    root@Tower:~# trolley
+    Commands:
+      trolley help [COMMAND]          # Describe available commands or one specific command
+      trolley info NAME [VERSION]     # Show package details
+      trolley install NAME [VERSION]  # Install a new package
+      trolley list [NAME]             # List installed packages
+      trolley remove NAME             # Remove a package
+      trolley search [NAME]           # Searches for matching packages
+      trolley version                 # Show Trolley version
 
 Tips
 
 * If you do not want a package to be installed on reboot, remove it from `/boot/extra`.
-* If you do not specify a package version on install, the newest available package will be used. That package will be from Slackware 14.0. **Be Careful**.
+* Trolley is optimistic about versions. It will always pick the newest, best match.
+* If you do not specify a package version on install, the newest available package will be used.
 
 ## Examples
 
-Versions are listed in descending slackware versions (14.0, 13.37, 13.1).
+### Searching
 
-Search an exact name
+Partial matches are supported.
 
-    ~# trolley search git
-    git (1.7.12.1, 1.7.4.4, 1.7.1)
+    root@Tower:~# trolley search open
+    openexr                openldap-client        openobex               openssh
+    openssl                openssl-solibs         openvpn                xf86-video-openchrome
+    open-cobol
 
-Search with a name fragment
+### Listing installed
 
-    ~# trolley search open
-    Package Name (Slackware 14.0, 13.37, 13.1)
-    ==========================================
-    -video-openchrome (0.2.906, 0.2.904, 0.2.904)
-    openvpn (2.2.2, 2.1.4, 2.1.1)
-    openssl-solibs (1.0.1c, 0.9.8r, 0.9.8n)
-    openssl (1.0.1c, 0.9.8r, 0.9.8n)
-    openexr (1.7.0, 1.7.0, 1.6.1)
-    openssh (6.1p1, 5.8p1, 5.5p1)
-    openobex (1.5, 1.5, 1.5)
-    openldap-client (2.4.31, 2.4.23, 2.4.21)
+List everything
 
-Install a package
-
-    ~# trolley install git
-    Downloading git 1.7.12.1
-    Verifying package git-1.7.12.1-i486-1.txz.
-    Installing package git-1.7.12.1-i486-1.txz:
-    PACKAGE DESCRIPTION:
-    # git (the stupid content tracker)
-    #
-    # Git is a fast, scalable, distributed revision control system with an
-    # unusually rich command set that provides both high-level operations
-    # and full access to internals.
-    #
-    # "git" can mean anything, depending on your mood.
-    #
-    # Git was originally written by Linus Torvalds and is currently
-    # maintained by Junio C. Hamano.
-    #
-    Executing install script for git-1.7.12.1-i486-1.txz.
-    Package git-1.7.12.1-i486-1.txz installed.
-
-Install from packages.json (See Batch Package Installs for more info)
-
-    ~# trolley install
-    Downloading git 1.7.12.1
-    Downloading nano 2.2.4
-
-List installed packages
-
-    ~# trolley list
-    gcc (4.5.2)
-    nano (2.2.4)
-    PlexMediaServer (0.9.7.28.33)
-
-Find an installed package
-
-    ~# trolley list plex
-    PlexMediaServer (0.9.7.28.33)
-
-Remove all packages called curl (assuming curl 7.27.0 and 7.20.1 installed)
-
-    ~# trolley remove curl
-    Removing package /var/log/packages/curl-7.27.0-i486-2...
-    Removing files:
+    root@Tower:~# trolley list
+    aaa_base          14.1
+    aaa_elflibs       14.1
+    acl               2.2.51
+    acpid             2.0.19
+    apmd              3.2.2
+    at                3.1.12
     ...
-    Removed curl 7.27.0
 
-    Removing package /var/log/packages/curl-7.20.1-i486-1...
-    Removing files:
-    ...
-    Removed curl 7.20.1
+Filter the list with packages containing "tr"
 
-Remove a specific package version
+  root@Tower:~# trolley list tr
+  attr     2.4.46
+  tree     1.6.0
+  trolley  0.2.0_pre3
 
-    ~# trolley remove curl 7.27.0
-    Removing package /var/log/packages/curl-7.27.0-i486-2...
-    Removing files:
-    ...
-    Removed curl 7.27.0
+### Get info on a package
 
-## Batch Package Installs
+    root@Tower:~# trolley info openssl
+    Name      openssl
+    Summary   openssl (Secure Sockets Layer toolkit)
+    Versions  0.9.8n, 0.9.8r, 0.9.8y, 1.0.1c, 1.0.1e, 1.0.1f
 
-Trolley supports using a `packages.json` file as a convenient way to specify dependencies for your plugin or project. Only exact version strings are supported (no version constraints).
+Get info on a specific version
 
-**Note:** If the user already has a package by the same name installed, the specified package will not be downloaded, even if the existing package is newer or older.
+    root@Tower:~# trolley info openssl 1.0.1e
+    Name       openssl
+    Summary    openssl (Secure Sockets Layer toolkit)
+    Version    1.0.1e
+    Arch       x86_64
+    Build      1
+    Size       12974080 (2912256 compressed)
+    Slackware  14.1
+    Patch      no
 
-Example:
+## Install a package
 
-```json
-{
-  "gcc": "4.5.2",
-  "openssl": "1.0.1c",
-  "nano": "2.2.4"
-}
-```
-
-Then run `trolley install` in the same directory as `packages.json`. Profit.
+    root@Tower:~# trolley install openssl
+    => Downloading openssl (1.0.1f)
+    => Installing
+    => Installed
 
 ## License
 
 MIT. See LICENSE.txt for details.
-
-## Development
-
-This app uses [slackpack](https://github.com/nicinabox/slackpack) for packaging.
-
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/nicinabox/trolley/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
