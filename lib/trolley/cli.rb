@@ -57,7 +57,7 @@ module Trolley
       package = Trolley::Package.new(pkg, version_string)
       version = package.version
 
-      status "Downloading #{package.name} (#{version['version']})"
+      status "Downloading #{package.name} (#{version['version']} #{version['arch']})"
 
       FileUtils.mkdir_p '/boot/extra'
       File.open("/boot/extra/#{version['package_name']}", "wb") do |f|

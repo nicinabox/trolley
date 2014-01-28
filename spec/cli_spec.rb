@@ -98,7 +98,7 @@ describe Trolley::CLI do
     it 'installs a package by name' do
       output = capture(:stdout) { cli.install('openssl') }
       output.should == <<-out.outdent
-        => Downloading openssl (1.0.1f)
+        => Downloading openssl (1.0.1f i486)
         => Installing
         => Installed
       out
@@ -109,7 +109,7 @@ describe Trolley::CLI do
     it 'installs a package by name and version' do
       output = capture(:stdout) { cli.install('openssl', '1.0.1c') }
       output.should == <<-out.outdent
-        => Downloading openssl (1.0.1c)
+        => Downloading openssl (1.0.1c i486)
         => Installing
         => Installed
       out
@@ -127,7 +127,7 @@ describe Trolley::CLI do
     it 'supports a version constraint' do
       output = capture(:stdout) { cli.install('openssl', '> 1.0') }
       output.should == <<-out.outdent
-        => Downloading openssl (1.0.1f)
+        => Downloading openssl (1.0.1f i486)
         => Installing
         => Installed
       out
