@@ -40,7 +40,7 @@ Trolley matches your arch automatically: `trolley install openssl`.
 
 If you're building a package with boiler, trolley is included automatically. If you're doing your own thing, add this to your code:
 
-     [ "command -v trolley" == "" ] && wget -qO- --no-check-certificate https://raw.github.com/nicinabox/trolley/master/install.sh | sh -
+     [[ "command -v trolley" == "" ]] && wget -qO- --no-check-certificate https://raw.github.com/nicinabox/trolley/master/install.sh | sh -
 
 ## Usage
 
