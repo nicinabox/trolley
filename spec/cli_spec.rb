@@ -115,6 +115,15 @@ describe Trolley::CLI do
       out
     end
 
+    it 'installs a package by url' do
+      output = capture(:stdout) { cli.install('http://slackware.org.uk/people/alien/restricted_slackbuilds/handbrake/pkg64/14.0/handbrake-0.9.9-x86_64-1alien.txz') }
+      output.should == <<-out.outdent
+        => Downloading handbrake (0.9.9 x86_64)
+        => Installing
+        => Installed
+      out
+    end
+
     it 'returns error for non-existant package' do
       allow(Trolley::CLI).to receive(:get) { [] }
 

@@ -47,21 +47,28 @@ module Trolley
 
     desc "install NAME [VERSION]", "Install a new package"
     def install(name, version_string = nil)
-      pkg = self.class.get("/packages/#{name}")
+      if url? name
+        package = Trolley::Package.new(name)
+      else
+        pkg = self.class.get("/packages/#{name}")
+        unless pkg.any?
+          status "No package named #{name}", :yellow
+          return
+        end
 
-      unless pkg.any?
-        status "No package named #{name}", :yellow
-        return
+        package = Trolley::Package.new(pkg, version_string)
       end
 
-      package = Trolley::Package.new(pkg, version_string)
       version = package.version
-
       status "Downloading #{package.name} (#{version['version']} #{version['arch']})"
 
       FileUtils.mkdir_p '/boot/extra'
       File.open("/boot/extra/#{version['package_name']}", "wb") do |f|
-        f.write HTTParty.get("http://slackware.cs.utah.edu/pub#{version['path']}")
+        if url? name
+          f.write HTTParty.get(name)
+        else
+          f.write HTTParty.get("http://slackware.cs.utah.edu/pub#{version['path']}")
+        end
       end
 
       status "Installing"

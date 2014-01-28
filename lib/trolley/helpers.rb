@@ -13,15 +13,21 @@ module Trolley
     end
     module_function :unraid?
 
+    def url?(data)
+      return unless data.is_a? String
+      /^http/ =~ data
+    end
+
     def details(package)
-      regex = /(.+)-(.+)-(.+)-(.+)/
+      regex = /((.+)-(.+)-(.+)-(.+)(.t\wz)?)/
       info  = regex.match(package)
 
       {
-        name:    info[1],
-        version: info[2],
-        arch:    info[3],
-        build:   info[4]
+        package_name: info[1],
+        name:    info[2],
+        version: info[3],
+        arch:    info[4],
+        build:   info[5]
       }
     end
 

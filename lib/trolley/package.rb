@@ -9,9 +9,16 @@ module Trolley
     def initialize(data, target_version_string = nil)
       @target_version_string = target_version_string
 
-      @name           = data['name']
-      @versions       = data['versions']
-      @version        = matched_version
+      if url? data
+        package_name = File.basename(data)
+        info         = stringify_keys details package_name
+        @name        = info['name']
+        @version     = info
+      else
+        @name      = data['name']
+        @versions  = data['versions']
+        @version   = matched_version
+      end
     end
 
   private

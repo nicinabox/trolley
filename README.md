@@ -129,6 +129,11 @@ Get info on a specific version
     => Installing
     => Installed
 
+## Todo
+
+* Match version to SW version automatically
+* Allow SW version override
+
 ## License
 
 MIT. See LICENSE.txt for details.
