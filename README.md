@@ -12,7 +12,7 @@ You may need to reopen your terminal session after installing.
 
 ## You need to install dependencies for a plugin
 
-Without trolley, you need to search the web for a package, download it, get it on your unRAID box, install it, and remember to put it in /boot/extra for next time.
+Without trolley: search the web for a package, download it, get it on your unRAID box, install it, and remember to put it in /boot/extra for next time.
 
 With trolley, you can do all that in one go: `trolley install openssl`.
 
@@ -78,10 +78,10 @@ List everything
 
 Filter the list with packages containing "tr"
 
-  root@Tower:~# trolley list tr
-  attr     2.4.46
-  tree     1.6.0
-  trolley  0.2.0_pre3
+    root@Tower:~# trolley list tr
+    attr     2.4.46
+    tree     1.6.0
+    trolley  0.2.0_pre3
 
 ### Get info on a package
 
