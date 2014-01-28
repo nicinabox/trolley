@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version=0.1.12
+version=0.2.0
 
 # Make sure we've got an extras directory
 mkdir -p /boot/extra

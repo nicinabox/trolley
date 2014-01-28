@@ -6,6 +6,12 @@ Compatible with unRAID >5.0
 
 ## Install
 
+With curl
+
+    curl -sk https://raw.github.com/nicinabox/trolley/master/install.sh | sh
+
+With wget
+
     wget -qO- --no-check-certificate https://raw.github.com/nicinabox/trolley/master/install.sh | sh -
 
 You may need to reopen your terminal session after installing.
