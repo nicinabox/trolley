@@ -19,10 +19,22 @@ module Trolley
 
       version = versions.select do |v|
         potential = Gem::Dependency.new(name, v['version'])
-        target =~ potential
+        target =~ potential if v['x64'] == x64
       end
 
-      version.last
+      if version.last.nil?
+        raise Exception, "No matching #{arch} version of #{name} #{target_version_string}"
+      else
+        version.last
+      end
+    end
+
+    def x64
+      'x86_64' == arch
+    end
+
+    def arch
+      `uname -m`.strip
     end
 
   end
