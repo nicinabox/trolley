@@ -12,29 +12,35 @@ You may need to reopen your terminal session after installing.
 
 ## Why use trolley?
 
-## You need to install dependencies for a plugin
+### You need to install dependencies for a plugin
 
 Without trolley: search the web for a package, download it, get it on your unRAID box, install it, and remember to put it in /boot/extra for next time.
 
 With trolley, you can do all that in one go: `trolley install openssl`.
 
-## You need to remove a broken or incompatible package
+### You need to remove a broken or incompatible package
 
 The common process is to remove it from /boot/extra then run removepkg. You might even have to restart.
 
 With trolley, it's just `trolley remove openssl`. No restart required.
 
-## You need to update existing dependencies
+### You need to update existing dependencies
 
 Without trolley: remove from /boot/extra then run removepkg. Maybe restart. Then, search the web for a new version, download it, get it on your unRAID box, install it, and remember to put it in /boot/extra for next time. Woof.
 
 With trolley, it's just `trolley update openssl`.
 
-## You need to install architecture specific versions
+### You need to install architecture specific versions
 
 If you need a 64-bit package, go through the tedious install process, but be sure to get the x86_64 version and not the i*86 version. Oops, got the wrong one? Do over.
 
 Trolley matches your arch automatically: `trolley install openssl`.
+
+### You're a developer and you want to use trolley to manage your plugin's dependencies
+
+If you're building a package with boiler, trolley is included automatically. If you're doing your own thing, add this to your code:
+
+     [ "command -v trolley" == "" ] && wget -qO- --no-check-certificate https://raw.github.com/nicinabox/trolley/master/install.sh | sh -
 
 ## Usage
 
