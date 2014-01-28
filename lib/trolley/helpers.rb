@@ -28,10 +28,6 @@ module Trolley
     def unraid?
       /unraid/i =~ `uname -a`
     end
-
-    def unraid?
-      /unraid/i =~ `uname -a`
-    end
     module_function :unraid?
 
     def installed
