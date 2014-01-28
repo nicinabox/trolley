@@ -19,7 +19,7 @@ module Trolley
 
       version = versions.select do |v|
         potential = Gem::Dependency.new(name, v['version'])
-        target =~ potential if v['x64'] == x64
+        target =~ potential if v['x64'] == x64?
       end
 
       if version.last.nil?
@@ -29,7 +29,7 @@ module Trolley
       end
     end
 
-    def x64
+    def x64?
       'x86_64' == arch
     end
 

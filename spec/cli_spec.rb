@@ -5,7 +5,7 @@ describe Trolley::CLI do
 
   before do
     FakeFS.activate!
-    Trolley::Package.any_instance.stub(x64: false)
+    Trolley::Package.any_instance.stub(x64?: false)
   end
 
   after do

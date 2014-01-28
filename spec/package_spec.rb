@@ -7,7 +7,7 @@ describe Trolley::Package do
   let(:receiver) { double("receiver") }
 
   before(:each) do
-    Trolley::Package.any_instance.stub(x64: false)
+    Trolley::Package.any_instance.stub(x64?: false)
   end
 
   context "with no version" do
@@ -73,7 +73,7 @@ describe Trolley::Package do
 
     context '64 bit' do
       before(:each) do
-        Trolley::Package.any_instance.stub(x64: true)
+        Trolley::Package.any_instance.stub(x64?: true)
       end
 
       it 'supports >' do
@@ -122,7 +122,7 @@ describe Trolley::Package do
     end
 
     it ".version for x86_64" do
-      Trolley::Package.any_instance.stub(x64: true)
+      Trolley::Package.any_instance.stub(x64?: true)
 
       @package = Trolley::Package.new(openssl_json, '> 1.0.1c')
       @package.version.should include 'version' => '1.0.1f'
