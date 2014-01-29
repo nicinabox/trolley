@@ -124,15 +124,12 @@ Get info on a specific version
 
 ## Install a package
 
+Note: If a package version isn't specified, the most optimistic version available for your slackware version will be used. If you're using Slackare 13.1 and you do `trolley install openssl`, 0.9.8y will be used. You can override this behavior by specifying a version.
+
     root@Tower:~# trolley install openssl
     => Downloading openssl (1.0.1f)
     => Installing
     => Installed
-
-## Todo
-
-* Match version to SW version automatically
-* Allow SW version override
 
 ## License
 

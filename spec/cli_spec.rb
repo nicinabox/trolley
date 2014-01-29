@@ -6,6 +6,7 @@ describe Trolley::CLI do
   before do
     FakeFS.activate!
     Trolley::Package.any_instance.stub(x64?: false)
+    Trolley::Package.any_instance.stub(slackware: '13.1')
   end
 
   after do
@@ -98,12 +99,12 @@ describe Trolley::CLI do
     it 'installs a package by name' do
       output = capture(:stdout) { cli.install('openssl') }
       output.should == <<-out.outdent
-        => Downloading openssl (1.0.1f i486)
+        => Downloading openssl (0.9.8y i486)
         => Installing
         => Installed
       out
 
-      File.exists?("/boot/extra/openssl-1.0.1f-i486-1_slack14.0.txz").should be_true
+      File.exists?("/boot/extra/openssl-0.9.8y-i486-1_slack13.1.txz").should be_true
     end
 
     it 'installs a package by name and version' do

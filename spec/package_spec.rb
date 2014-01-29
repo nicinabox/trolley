@@ -8,6 +8,7 @@ describe Trolley::Package do
 
   before(:each) do
     Trolley::Package.any_instance.stub(x64?: false)
+    Trolley::Package.any_instance.stub(slackware: '13.1')
   end
 
   context "with no version" do
@@ -24,7 +25,7 @@ describe Trolley::Package do
     end
 
     it ".version" do
-      @package.version.should include 'version' => '1.0.1f'
+      @package.version.should include 'version' => '0.9.8y'
     end
   end
 
