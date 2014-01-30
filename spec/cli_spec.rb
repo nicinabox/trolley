@@ -14,7 +14,7 @@ describe Trolley::CLI do
     FakeFS::FileSystem.clear
   end
 
-  let(:cli) { Trolley::CLI.new }
+  # let(:cli) { Trolley::CLI.new }
 
   describe 'search' do
     it 'returns all packages' do
@@ -27,7 +27,7 @@ describe Trolley::CLI do
           ]')
       }
 
-      output = capture(:stdout) { cli.search() }
+      output = capture(:stdout) { Trolley::CLI.start(['search']) }
       output.should == <<-out.outdent
         ConsoleKit
       out
@@ -48,7 +48,7 @@ describe Trolley::CLI do
       }
 
 
-      output = capture(:stdout) { cli.search('openssl') }
+      output = capture(:stdout) { Trolley::CLI.start(['search', 'openssl']) }
       output.should == <<-out.outdent
         openssl         openssl-solibs
       out
@@ -72,7 +72,7 @@ describe Trolley::CLI do
     end
 
     it 'returns installed packages' do
-      output = capture(:stdout) { cli.list() }
+      output = capture(:stdout) { Trolley::CLI.start(['list']) }
       output.should == <<-out.outdent
         curl     7.20.1
         openssh  5.9p1
@@ -83,7 +83,7 @@ describe Trolley::CLI do
     end
 
     it "returns installed packages, filtered" do
-      output = capture(:stdout) { cli.list('curl') }
+      output = capture(:stdout) { Trolley::CLI.start(['list', 'curl']) }
       output.should == <<-out.outdent
         curl  7.20.1
       out
@@ -97,7 +97,7 @@ describe Trolley::CLI do
     end
 
     it 'installs a package by name' do
-      output = capture(:stdout) { cli.install('openssl') }
+      output = capture(:stdout) { Trolley::CLI.start(['install', 'openssl']) }
       output.should == <<-out.outdent
         => Downloading openssl (0.9.8y i486)
         => Installing
@@ -108,7 +108,7 @@ describe Trolley::CLI do
     end
 
     it 'installs a package by name and version' do
-      output = capture(:stdout) { cli.install('openssl', '1.0.1c') }
+      output = capture(:stdout) { Trolley::CLI.start(['install', 'openssl', '1.0.1c']) }
       output.should == <<-out.outdent
         => Downloading openssl (1.0.1c i486)
         => Installing
@@ -117,7 +117,7 @@ describe Trolley::CLI do
     end
 
     it 'installs a package by url' do
-      output = capture(:stdout) { cli.install('http://slackware.org.uk/people/alien/restricted_slackbuilds/handbrake/pkg64/14.0/handbrake-0.9.9-x86_64-1alien.txz') }
+      output = capture(:stdout) { Trolley::CLI.start(['install', 'http://slackware.org.uk/people/alien/restricted_slackbuilds/handbrake/pkg64/14.0/handbrake-0.9.9-x86_64-1alien.txz']) }
       output.should == <<-out.outdent
         => Downloading handbrake (0.9.9 x86_64)
         => Installing
@@ -128,23 +128,34 @@ describe Trolley::CLI do
     it 'does not install an existing package' do
       FileUtils.mkdir_p '/var/log/packages/openssl-0.9.8y-i486-1_slack13.1'
 
-      output = capture(:stdout) { cli.install('openssl') }
+      output = capture(:stdout) { Trolley::CLI.start(['install', 'openssl']) }
       output.should == <<-out.outdent
         => Using openssl (0.9.8y)
+      out
+    end
+
+    it 'force installs an exitsing package' do
+      FileUtils.mkdir_p '/var/log/packages/openssl-0.9.8y-i486-1_slack13.1'
+
+      output = capture(:stdout) { Trolley::CLI.start(['install', 'openssl', '-f']) }
+      output.should == <<-out.outdent
+        => Downloading openssl (0.9.8y i486)
+        => Installing
+        => Installed
       out
     end
 
     it 'returns error for non-existant package' do
       allow(Trolley::CLI).to receive(:get) { [] }
 
-      output = capture(:stdout) { cli.install('nope') }
+      output = capture(:stdout) { Trolley::CLI.start(['install', 'nope']) }
       output.should == <<-out.outdent
         => No package named nope
       out
     end
 
     it 'supports a version constraint' do
-      output = capture(:stdout) { cli.install('openssl', '> 1.0') }
+      output = capture(:stdout) { Trolley::CLI.start(['install', 'openssl', '> 1.0']) }
       output.should == <<-out.outdent
         => Downloading openssl (1.0.1f i486)
         => Installing
@@ -163,7 +174,7 @@ describe Trolley::CLI do
     end
 
     it 'shows package details' do
-      output = capture(:stdout) { cli.info('openssl') }
+      output = capture(:stdout) { Trolley::CLI.start(['info', 'openssl']) }
       output.should == <<-out.outdent
         Name      openssl
         Summary   openssl (Secure Sockets Layer toolkit)
@@ -172,7 +183,7 @@ describe Trolley::CLI do
     end
 
     it 'shows package details for a version' do
-      output = capture(:stdout) { cli.info('openssl', '0.9.8n') }
+      output = capture(:stdout) { Trolley::CLI.start(['info', 'openssl', '0.9.8n']) }
       output.should == <<-out.outdent
         Name       openssl
         Summary    openssl (Secure Sockets Layer toolkit)

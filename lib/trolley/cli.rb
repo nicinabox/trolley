@@ -46,6 +46,7 @@ module Trolley
     end
 
     desc "install NAME [VERSION]", "Install a new package"
+    method_option :force, :type => :boolean, :aliases => "-f"
     def install(name, version_string = nil)
       if url? name
         package = Trolley::Package.new(name)
@@ -60,7 +61,7 @@ module Trolley
       end
 
       version = package.version
-      if installed? version['file_name']
+      if !options[:force] and installed? version['file_name']
         status "Using #{package.name} (#{version['version']})"
         return
       end
