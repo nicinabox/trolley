@@ -122,14 +122,43 @@ Get info on a specific version
     Slackware  14.1
     Patch      no
 
-## Install a package
-
-Note: If a package version isn't specified, the most optimistic version available for your slackware version will be used. If you're using Slackare 13.1 and you do `trolley install openssl`, 0.9.8y will be used. You can override this behavior by specifying a version.
+### Install a package
 
     root@Tower:~# trolley install openssl
     => Downloading openssl (1.0.1f)
     => Installing
     => Installed
+
+## Spec
+
+### Version constraints
+
+The following version constraints are supported:
+
+* >
+* <
+* =
+* >=
+* <=
+* ~>
+
+### Package matching
+
+Trolley is **optimistic** when picking versions. It will always pick the newest available **except** when a package version isn't specified (`trolley install openssl`).
+
+In this case, the most optimistic version available *for your Slackware version* will be used.
+
+Example: if you're on Slackare 13.1 and you do `trolley install openssl`, 0.9.8y will be used.
+
+You can override this behavior by specifying a version, or a constraint (eg, ">0").
+
+### Architectures
+
+34 and 64-bit architectures are automatically supported. Package matching rules apply in addition to matching the host OS arch.
+
+### URLS
+
+Trolley can install official packages by name. It also supports installing via url, if the package is a 3rd party Slackware package (the name will formatted NAME-VERSION-ARCH-BUILD.g*z).
 
 ## License
 
