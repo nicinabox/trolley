@@ -62,7 +62,7 @@ module Trolley
 
       version = package.version
 
-      if version['arch_ok']
+      unless version['arch_ok']
         status "Architecture mismatch. Can't install #{package.name}", :red
         return
       end

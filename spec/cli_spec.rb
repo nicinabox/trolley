@@ -115,6 +115,7 @@ describe Trolley::CLI do
     end
 
     it 'installs a package by url' do
+      Trolley::Package.any_instance.stub(x64?: true)
       output = capture(:stdout) { Trolley::CLI.start(['install', 'http://slackware.org.uk/people/alien/restricted_slackbuilds/handbrake/pkg64/14.0/handbrake-0.9.9-x86_64-1alien.txz']) }
       output.should == <<-out.outdent
         => Downloading handbrake (0.9.9 x86_64)

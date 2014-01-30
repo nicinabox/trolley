@@ -20,7 +20,7 @@ module Trolley
         @version   = matched_version
       end
 
-      @version['arch_ok'] = (@version['arch'] == 'x86_64' && x64?)
+      @version['arch_ok'] = x64?(@version['arch']) == x64?
     end
 
   private
@@ -54,8 +54,8 @@ module Trolley
       end
     end
 
-    def x64?
-      'x86_64' == arch
+    def x64?(version_arch)
+      'x86_64' == version_arch || arch
     end
 
     def slackware
