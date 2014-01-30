@@ -39,6 +39,23 @@ describe Trolley::Package do
     end
   end
 
+  context "from a url" do
+    before(:each) do
+      @package = Trolley::Package.new('http://slackware.org.uk/people/alien/restricted_slackbuilds/handbrake/pkg64/14.0/handbrake-0.9.9-x86_64-1alien.txz')
+    end
+
+    it ".name" do
+      @package.name.should == 'handbrake'
+    end
+
+    it ".version" do
+      @package.version['version'].should == '0.9.9'
+      @package.version['arch'].should == 'x86_64'
+      @package.version['package_name'].should == 'handbrake-0.9.9-x86_64-1alien.txz'
+      @package.version['file_name'].should == 'handbrake-0.9.9-x86_64-1alien'
+    end
+  end
+
   context 'with version constraints' do
     context '32 bit' do
       it 'supports >' do

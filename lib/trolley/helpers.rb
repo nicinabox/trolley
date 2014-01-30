@@ -19,16 +19,21 @@ module Trolley
     end
 
     def details(package)
-      regex = /((.+)-(.+)-(.+)-(.+)(.t\wz)?)/
-      info  = regex.match(package)
+      regex = %r{
+        (?<package_name>
+          (?<file_name>
+            (?<name> .+)-
+            (?<version> .+)-
+            (?<arch> .+)-
+            (?<build>\w+)
+          )
+          \.?(?:t\wz)?
+        )
+      }x
 
-      {
-        package_name: info[1],
-        name:    info[2],
-        version: info[3],
-        arch:    info[4],
-        build:   info[5]
-      }
+      info = regex.match(package)
+      keys = info.names.map { |k| k.to_sym }
+      ::Hash[keys.zip(info.captures)]
     end
 
   end
