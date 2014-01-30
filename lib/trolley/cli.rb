@@ -60,6 +60,11 @@ module Trolley
       end
 
       version = package.version
+      if installed? version['file_name']
+        status "Using #{package.name} (#{version['version']})"
+        return
+      end
+
       status "Downloading #{package.name} (#{version['version']} #{version['arch']})"
 
       FileUtils.mkdir_p '/boot/extra'
@@ -73,7 +78,7 @@ module Trolley
 
       status "Installing"
 
-      if unraid? and not installed? version['file_name']
+      if unraid?
         `installpkg /boot/extra/#{version['package_name']}`
       end
 

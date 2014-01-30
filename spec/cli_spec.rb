@@ -125,6 +125,15 @@ describe Trolley::CLI do
       out
     end
 
+    it 'does not install an existing package' do
+      FileUtils.mkdir_p '/var/log/packages/openssl-0.9.8y-i486-1_slack13.1'
+
+      output = capture(:stdout) { cli.install('openssl') }
+      output.should == <<-out.outdent
+        => Using openssl (0.9.8y)
+      out
+    end
+
     it 'returns error for non-existant package' do
       allow(Trolley::CLI).to receive(:get) { [] }
 
