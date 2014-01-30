@@ -33,7 +33,10 @@ module Trolley
 
       info = regex.match(package)
       keys = info.names.map { |k| k.to_sym }
-      ::Hash[keys.zip(info.captures)]
+      pkg  = ::Hash[keys.zip(info.captures)]
+      pkg.merge(
+        x64: pkg[:arch] == 'x86_64'
+      )
     end
 
   end
