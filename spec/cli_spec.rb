@@ -6,7 +6,7 @@ describe Trolley::CLI do
   before do
     FakeFS.activate!
     Trolley::Package.any_instance.stub(x64?: false)
-    Trolley::Package.any_instance.stub(slackware: '13.1')
+    Trolley::Package.any_instance.stub(slackware: '13.1.0')
   end
 
   after do

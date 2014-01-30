@@ -48,7 +48,7 @@ module Trolley
 
       else
         # If no target version, use current slackware
-        slackware == version['slackware']
+        /#{version['slackware']}/ =~ slackware
       end
     end
 
