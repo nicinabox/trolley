@@ -14,8 +14,6 @@ describe Trolley::CLI do
     FakeFS::FileSystem.clear
   end
 
-  # let(:cli) { Trolley::CLI.new }
-
   describe 'search' do
     it 'returns all packages' do
       allow(Trolley::CLI).to receive(:get) {

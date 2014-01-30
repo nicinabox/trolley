@@ -19,6 +19,8 @@ module Trolley
         @versions  = data['versions']
         @version   = matched_version
       end
+
+      @version['arch_ok'] = (@version['arch'] == 'x86_64' && x64?)
     end
 
   private
@@ -31,7 +33,7 @@ module Trolley
 
         target =~ potential and
         v['x64'] == x64? and
-        os_acceptable?(v)
+        from_os?(v)
       end
 
       if version.empty?
@@ -41,7 +43,7 @@ module Trolley
       end
     end
 
-    def os_acceptable?(version)
+    def from_os?(version)
       if @target_version_string
         # If target version, use version's slackaware
         !!version['slackware']
@@ -54,10 +56,6 @@ module Trolley
 
     def x64?
       'x86_64' == arch
-    end
-
-    def arch
-      `uname -m`.strip
     end
 
     def slackware

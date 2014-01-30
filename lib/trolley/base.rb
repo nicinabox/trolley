@@ -33,6 +33,10 @@ module Trolley
       end if unraid?
     end
 
+    def arch
+      `uname -m`.strip
+    end
+
   private
 
     def env_path

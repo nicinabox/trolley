@@ -61,6 +61,12 @@ module Trolley
       end
 
       version = package.version
+
+      if version['arch_ok']
+        status "Architecture mismatch. Can't install #{package.name}", :red
+        return
+      end
+
       if !options[:force] and installed? version['file_name']
         status "Using #{package.name} (#{version['version']})"
         return
@@ -81,6 +87,11 @@ module Trolley
 
       if unraid?
         `installpkg /boot/extra/#{version['package_name']}`
+
+        if $?.exitstatus > 0
+          status "There was an error installing #{package.name}", :red
+          return
+        end
       end
 
       status "Installed", :green
