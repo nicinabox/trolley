@@ -148,13 +148,13 @@ Trolley is **optimistic** when picking versions. It will always pick the newest 
 
 In this case, the most optimistic version available *for your Slackware version* will be used.
 
-Example: if you're on Slackare 13.1 and you do `trolley install openssl`, 0.9.8y will be used.
+Example: if you're on Slackware 13.1 and you do `trolley install openssl`, 0.9.8y will be used.
 
 You can override this behavior by specifying a version, or a constraint (eg, ">0").
 
 ### Architectures
 
-34 and 64-bit architectures are automatically supported. Package matching rules apply in addition to matching the host OS arch.
+32 and 64-bit architectures are automatically supported. Package matching rules apply in addition to matching the host OS arch.
 
 ### URLS
 
