@@ -6,5 +6,8 @@
     "Nic Aitch <nic@nicinabox.com>"
   ],
   "license": "MIT",
-  "ignore": ["install.sh", "spec"]
+  "ignore": ["install.sh", "spec"],
+  "post_install": [
+    "echo 'Please run `source /etc/bundlerc` or restart your terminal session.'"
+  ]
 }
