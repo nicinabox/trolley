@@ -29,7 +29,8 @@ module Trolley
       target = Gem::Dependency.new(name, @target_version_string)
 
       version = versions.select do |v|
-        potential = Gem::Dependency.new(name, v['version'])
+        version_string = v['version'].match(Gem::Version::VERSION_PATTERN)[0]
+        potential = Gem::Dependency.new(name, version_string)
 
         target =~ potential and
         v['x64'] == x64? and

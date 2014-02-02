@@ -2,6 +2,7 @@ require 'trolley/cli'
 
 describe Trolley::CLI do
   let!(:openssl_json) { JSON.parse(File.read('spec/support/openssl.json')) }
+  let!(:kernel_headers_json) { JSON.parse(File.read('spec/support/kernel-headers.json')) }
 
   before do
     FakeFS.activate!
@@ -98,6 +99,14 @@ describe Trolley::CLI do
       output = capture(:stdout) { Trolley::CLI.start(['install', 'openssl']) }
       output.should == <<-out.outdent
         => Downloading openssl (0.9.8y i486)
+        => Installing
+        => Installed
+      out
+
+      allow(Trolley::CLI).to receive(:get).and_return(kernel_headers_json)
+      output1 = capture(:stdout) { Trolley::CLI.start(['install', 'kernel-headers']) }
+      output1.should == <<-out.outdent
+        => Downloading kernel-headers (2.6.33.4_smp x86)
         => Installing
         => Installed
       out
