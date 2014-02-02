@@ -7,7 +7,6 @@ describe Trolley::Package do
   let(:receiver) { double("receiver") }
 
   before(:each) do
-    # Trolley::Package.any_instance.stub(x64?: false)
     Trolley::Package.any_instance.stub(arch: 'i686')
     Trolley::Package.any_instance.stub(slackware: '13.1')
   end

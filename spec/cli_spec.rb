@@ -3,6 +3,7 @@ require 'trolley/cli'
 describe Trolley::CLI do
   let!(:openssl_json) { JSON.parse(File.read('spec/support/openssl.json')) }
   let!(:kernel_headers_json) { JSON.parse(File.read('spec/support/kernel-headers.json')) }
+  let!(:ca_certs_json) { JSON.parse(File.read('spec/support/ca-certificates.json')) }
 
   before do
     FakeFS.activate!
@@ -107,6 +108,14 @@ describe Trolley::CLI do
       output1 = capture(:stdout) { Trolley::CLI.start(['install', 'kernel-headers']) }
       output1.should == <<-out.outdent
         => Downloading kernel-headers (2.6.33.4_smp x86)
+        => Installing
+        => Installed
+      out
+
+      allow(Trolley::CLI).to receive(:get).and_return(ca_certs_json)
+      output1 = capture(:stdout) { Trolley::CLI.start(['install', 'ca-certificates']) }
+      output1.should == <<-out.outdent
+        => Downloading ca-certificates (20130906 noarch)
         => Installing
         => Installed
       out

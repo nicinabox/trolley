@@ -45,9 +45,8 @@ module Trolley
     end
 
     def from_os?(version=nil)
-      if @target_version_string
-        # If target version, use version's slackaware
-        !!version['slackware']
+      if version['arch'] == 'noarch' or @target_version_string
+        true
 
       else
         # If no target version, use current slackware
