@@ -190,6 +190,28 @@ describe Trolley::CLI do
     end
   end
 
+  describe 'update' do
+    before(:each) do
+      allow(Trolley::CLI).to receive(:get).and_return(openssl_json)
+      allow(HTTParty).to receive(:get).and_return([])
+    end
+
+    it 'installs a newer version of an existing package' do
+      FileUtils.mkdir_p '/var/log/packages/openssl-0.9.8r-i486-3'
+      FileUtils.mkdir_p '/boot/extra/openssl-0.9.8r-i486-3.txz'
+
+      output = capture(:stdout) { Trolley::CLI.start(['install', 'openssl']) }
+      output.should == <<-out.outdent
+        => Downloading openssl (0.9.8y i486)
+        => Installing
+        => Installed
+      out
+
+      File.exists?("/boot/extra/openssl-0.9.8r-i486-3.txz").should be_false
+      File.exists?("/boot/extra/openssl-0.9.8y-i486-1_slack13.1.txz").should be_true
+    end
+  end
+
   describe 'info' do
     before(:each) do
       FakeFS.deactivate!

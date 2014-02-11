@@ -81,6 +81,11 @@ module Trolley
       status "Downloading #{package.name} (#{version['version']} #{version['arch']})"
 
       FileUtils.mkdir_p '/boot/extra'
+
+      # Remove old archive versions
+      FileUtils.rm_rf Dir["/boot/extra/#{package.name}*"]
+
+      # Write out this package
       File.open("/boot/extra/#{version['package_name']}", "wb") do |f|
         if url? name
           f.write HTTParty.get(name)
