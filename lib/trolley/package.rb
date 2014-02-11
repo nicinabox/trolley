@@ -38,7 +38,7 @@ module Trolley
       end
 
       if version.empty?
-        raise Exception, "No matching version of #{name} #{@target_version_string} for your OS (Slackware #{slackware} #{arch})"
+        raise Exception, "No matching version of #{name} #{@target_version_string} for your OS (Slackware #{slackware} #{arch})\n"
       else
         version.last
       end
