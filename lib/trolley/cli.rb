@@ -45,7 +45,7 @@ module Trolley
       end
     end
 
-    desc "install NAME [VERSION]", "Install a new package"
+    desc "install NAME [VERSION|latest]", "Install a new package"
     method_option :force, :type => :boolean, :aliases => "-f"
     def install(name, version_string = nil)
       if url? name
@@ -61,7 +61,7 @@ module Trolley
           package = Trolley::Package.new(pkg, version_string)
         rescue Exception => e
           status "#{e}\n", :red
-          status "Try `trolley install #{name} \"> 0\"` to install the latest"
+          status "Try `trolley install #{name} \"latest\"` to install the latest"
           return
         end
       end
@@ -103,7 +103,7 @@ module Trolley
       status "Installed", :green
     end
 
-    desc "update NAME [VERSION]", "Update an existing package"
+    desc "update NAME [VERSION|latest]", "Update an existing package"
     def update(name, version_string = nil)
       invoke :install, [name, version_string], force: true
     end

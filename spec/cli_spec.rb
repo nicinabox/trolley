@@ -179,6 +179,15 @@ describe Trolley::CLI do
         => Installed
       out
     end
+
+    it 'supports keyword: latest' do
+      output = capture(:stdout) { Trolley::CLI.start(['install', 'openssl', 'latest']) }
+      output.should == <<-out.outdent
+        => Downloading openssl (1.0.1f i486)
+        => Installing
+        => Installed
+      out
+    end
   end
 
   describe 'info' do

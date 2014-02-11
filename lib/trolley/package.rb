@@ -7,7 +7,7 @@ module Trolley
     attr_accessor :name, :versions, :version
 
     def initialize(data, target_version_string = nil)
-      @target_version_string = target_version_string
+      @target_version_string = parse_target_version(target_version_string)
 
       if url? data
         package_name = File.basename(data)
@@ -41,6 +41,14 @@ module Trolley
         raise Exception, "No matching version of #{name} #{@target_version_string} for your OS (Slackware #{slackware} #{arch})"
       else
         version.last
+      end
+    end
+
+    def parse_target_version(version)
+      if version == 'latest'
+        "> 0"
+      else
+        version
       end
     end
 
