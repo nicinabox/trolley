@@ -61,7 +61,7 @@ module Trolley
           package = Trolley::Package.new(pkg, version_string)
         rescue Exception => e
           status "#{e}\n", :red
-          status "Try `trolley install #{name} \"latest\"` to install the latest"
+          status "Try `trolley install #{name} latest` to install the latest"
           return
         end
       end
