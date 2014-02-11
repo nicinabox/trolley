@@ -103,6 +103,11 @@ module Trolley
       status "Installed", :green
     end
 
+    desc "update NAME [VERSION]", "Update an existing package"
+    def update(name, version_string = nil)
+      invoke :install, [name, version_string], force: true
+    end
+
     desc "remove NAME", "Remove a package"
     def remove(name)
       if yes? "Really remove #{name}?"
