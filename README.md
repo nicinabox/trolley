@@ -158,7 +158,7 @@ You can override this behavior by specifying a version, or a constraint (eg, ">0
 
 ### URLS
 
-Trolley can install official packages by name. It also supports installing via url, if the package is a 3rd party Slackware package (the name will formatted NAME-VERSION-ARCH-BUILD.g*z).
+Trolley can install official packages by name. It also supports installing via url, if the package is a 3rd party Slackware package (the name will formatted NAME-VERSION-ARCH-BUILD.t*z).
 
 ## License
 
