@@ -7,7 +7,7 @@ module Trolley
     include Trolley::Helpers
 
     def all_installed
-      Dir['/var/log/packages/*'].map {|p|
+      Dir['/var/log/packages/*'].map { |p|
         p.gsub('/var/log/packages/', '')
       }.sort { |a, b| a <=> b }
     end
