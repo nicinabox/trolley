@@ -52,7 +52,7 @@ module Trolley
         package = Trolley::Package.new(name)
       else
         pkg = self.class.get("/packages/#{name}")
-        unless pkg.any?
+        if pkg.code.to_i == 404
           status "No package named #{name}", :yellow
           return
         end

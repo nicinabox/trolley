@@ -1,9 +1,55 @@
 require 'trolley/cli'
 
 describe Trolley::CLI do
-  let!(:openssl_json) { JSON.parse(File.read('spec/support/openssl.json')) }
-  let!(:kernel_headers_json) { JSON.parse(File.read('spec/support/kernel-headers.json')) }
-  let!(:ca_certs_json) { JSON.parse(File.read('spec/support/ca-certificates.json')) }
+  let!(:base_response) {
+    {
+      last_modified: Date.new(2010, 1, 15).to_s,
+      content_length: '1024',
+      request_object: HTTParty::Request.new(Net::HTTP::Get, '/'),
+      response_object: Net::HTTPOK.new('1.1', 200, 'OK')
+    }
+  }
+
+  let!(:openssl_response) {
+    file = File.read('spec/support/openssl.json')
+
+    base_response[:response_object].stub(:body => file)
+    base_response[:response_object]['last-modified'] = base_response[:last_modified]
+    base_response[:response_object]['content-length'] = base_response[:content_length]
+    parsed_response = lambda { JSON.parse(file) }
+    HTTParty::Response.new(base_response[:request_object], base_response[:response_object], parsed_response)
+  }
+
+  let!(:kernel_headers_response) {
+    file = File.read('spec/support/kernel-headers.json')
+
+    base_response[:response_object].stub(:body => file)
+    base_response[:response_object]['last-modified'] = base_response[:last_modified]
+    base_response[:response_object]['content-length'] = base_response[:content_length]
+    parsed_response = lambda { JSON.parse(file) }
+    HTTParty::Response.new(base_response[:request_object], base_response[:response_object], parsed_response)
+  }
+
+  let!(:ca_certs_response) {
+    file = File.read('spec/support/ca-certificates.json')
+
+    base_response[:response_object].stub(:body => file)
+    base_response[:response_object]['last-modified'] = base_response[:last_modified]
+    base_response[:response_object]['content-length'] = base_response[:content_length]
+    parsed_response = lambda { JSON.parse(file) }
+    HTTParty::Response.new(base_response[:request_object], base_response[:response_object], parsed_response)
+  }
+
+  let(:not_found_response) {
+    not_found_response = base_response
+
+    not_found_response[:response_object] = Net::HTTPOK.new('1.1', 404, 'Not Found')
+    not_found_response[:response_object].stub(:body => '{"status":"404","error":"Not Found"}')
+    not_found_response[:response_object]['last-modified'] = not_found_response[:last_modified]
+    not_found_response[:response_object]['content-length'] = not_found_response[:content_length]
+    parsed_response = lambda { JSON.parse(not_found_response[:response_object].body) }
+    HTTParty::Response.new(not_found_response[:request_object], not_found_response[:response_object], parsed_response)
+  }
 
   before do
     FakeFS.activate!
@@ -92,7 +138,7 @@ describe Trolley::CLI do
 
   describe 'install' do
     before(:each) do
-      allow(Trolley::CLI).to receive(:get).and_return(openssl_json)
+      allow(Trolley::CLI).to receive(:get).and_return(openssl_response)
       allow(HTTParty).to receive(:get).and_return([])
     end
 
@@ -104,7 +150,7 @@ describe Trolley::CLI do
         => Installed
       out
 
-      allow(Trolley::CLI).to receive(:get).and_return(kernel_headers_json)
+      allow(Trolley::CLI).to receive(:get).and_return(kernel_headers_response)
       output1 = capture(:stdout) { Trolley::CLI.start(['install', 'kernel-headers']) }
       output1.should == <<-out.outdent
         => Downloading kernel-headers (2.6.33.4_smp x86)
@@ -112,7 +158,7 @@ describe Trolley::CLI do
         => Installed
       out
 
-      allow(Trolley::CLI).to receive(:get).and_return(ca_certs_json)
+      allow(Trolley::CLI).to receive(:get).and_return(ca_certs_response)
       output1 = capture(:stdout) { Trolley::CLI.start(['install', 'ca-certificates']) }
       output1.should == <<-out.outdent
         => Downloading ca-certificates (20130906 noarch)
@@ -163,7 +209,7 @@ describe Trolley::CLI do
     end
 
     it 'returns error for non-existant package' do
-      allow(Trolley::CLI).to receive(:get) { [] }
+      allow(Trolley::CLI).to receive(:get) { not_found_response }
 
       output = capture(:stdout) { Trolley::CLI.start(['install', 'nope']) }
       output.should == <<-out.outdent
@@ -192,7 +238,7 @@ describe Trolley::CLI do
 
   describe 'update' do
     before(:each) do
-      allow(Trolley::CLI).to receive(:get).and_return(openssl_json)
+      allow(Trolley::CLI).to receive(:get).and_return(openssl_response)
       allow(HTTParty).to receive(:get).and_return([])
     end
 
