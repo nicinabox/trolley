@@ -32,7 +32,7 @@ else
 
   plz.py install kernel-headers 2.6.37.6_smp
   plz.py install binutils 2.21.51.0.6
-  plz.py install glibc 2.15
+  plz.py install glibc 2.11.1
   plz.py install gcc 4.5.2
   plz.py install gcc-g 4.5.2  # gcc-g++
   plz.py install libmpc 0.8.2
