@@ -115,9 +115,8 @@ module Trolley
 
     desc "remove NAME", "Remove a package"
     def remove(name)
-      if yes? "Really remove #{name}?"
-        `removepkg #{name}`
-        status "#{name} removed", :green
+      if yes? "Really remove #{name}? [yN] "
+        puts `removepkg #{name}`
       end
     end
 
