@@ -260,11 +260,8 @@ describe Trolley::CLI do
 
   describe 'info' do
     before(:each) do
-      FakeFS.deactivate!
-      FakeFS::FileSystem.clear
-      allow(Trolley::CLI).to receive(:get) {
-        JSON.parse(File.read('spec/support/openssl.json'))
-      }
+      allow(Trolley::CLI).to receive(:get).and_return(openssl_response)
+      allow(HTTParty).to receive(:get).and_return([])
     end
 
     it 'shows package details' do
@@ -273,6 +270,18 @@ describe Trolley::CLI do
         Name      openssl
         Summary   openssl (Secure Sockets Layer toolkit)
         Versions  0.9.8n, 0.9.8r, 0.9.8y, 1.0.1c, 1.0.1e, 1.0.1f
+      out
+    end
+
+    it 'shows extra details if installed' do
+      FileUtils.mkdir_p('/var/log/packages')
+      FileUtils.touch('/var/log/packages/openssl-0.9.8y-i486-1_slack13.1')
+      output = capture(:stdout) { Trolley::CLI.start(['info', 'openssl']) }
+      output.should == <<-out.outdent
+        Name      openssl
+        Summary   openssl (Secure Sockets Layer toolkit)
+        Versions  0.9.8n, 0.9.8r, 0.9.8y, 1.0.1c, 1.0.1e, 1.0.1f
+        => openssl (0.9.8y) is installed
       out
     end
 

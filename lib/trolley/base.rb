@@ -12,8 +12,12 @@ module Trolley
       }.sort { |a, b| a <=> b }
     end
 
-    def installed? (name)
-      !!all_installed.find { |p| /#{name.downcase}/ =~ p }
+    def installed?(name)
+      !!installed(name)
+    end
+
+    def installed(name)
+      all_installed.find { |p| /#{name.downcase}/ =~ p }
     end
 
     def manifest

@@ -145,6 +145,11 @@ module Trolley
       end
 
       print_table info
+
+      if package_name = installed(package['name'])
+        pkg = details(package_name)
+        status "#{pkg[:name]} (#{pkg[:version]}) is installed"
+      end
     end
 
     desc "version", "Show Trolley version"
