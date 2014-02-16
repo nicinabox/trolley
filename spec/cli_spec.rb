@@ -142,7 +142,7 @@ describe Trolley::CLI do
       allow(HTTParty).to receive(:get).and_return([])
     end
 
-    it 'installs a package by name' do
+    it 'by name' do
       output = capture(:stdout) { Trolley::CLI.start(['install', 'openssl']) }
       output.should == <<-out.outdent
         => Downloading openssl (0.9.8y i486)
@@ -169,7 +169,7 @@ describe Trolley::CLI do
       File.exists?("/boot/extra/openssl-0.9.8y-i486-1_slack13.1.txz").should be_true
     end
 
-    it 'installs a package by name and version' do
+    it 'by name and version' do
       output = capture(:stdout) { Trolley::CLI.start(['install', 'openssl', '1.0.1c']) }
       output.should == <<-out.outdent
         => Downloading openssl (1.0.1c i486)
@@ -178,7 +178,7 @@ describe Trolley::CLI do
       out
     end
 
-    it 'installs a package by url' do
+    it 'by url' do
       Trolley::Package.any_instance.stub(x64?: true)
       output = capture(:stdout) { Trolley::CLI.start(['install', 'http://slackware.org.uk/people/alien/restricted_slackbuilds/handbrake/pkg64/14.0/handbrake-0.9.9-x86_64-1alien.txz']) }
       output.should == <<-out.outdent
