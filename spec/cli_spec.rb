@@ -20,6 +20,16 @@ describe Trolley::CLI do
     HTTParty::Response.new(base_response[:request_object], base_response[:response_object], parsed_response)
   }
 
+  let!(:httpd_response) {
+    file = File.read('spec/support/httpd.json')
+
+    base_response[:response_object].stub(:body => file)
+    base_response[:response_object]['last-modified'] = base_response[:last_modified]
+    base_response[:response_object]['content-length'] = base_response[:content_length]
+    parsed_response = lambda { JSON.parse(file) }
+    HTTParty::Response.new(base_response[:request_object], base_response[:response_object], parsed_response)
+  }
+
   let!(:kernel_headers_response) {
     file = File.read('spec/support/kernel-headers.json')
 
@@ -230,6 +240,16 @@ describe Trolley::CLI do
       output = capture(:stdout) { Trolley::CLI.start(['install', 'openssl', 'latest']) }
       output.should == <<-out.outdent
         => Downloading openssl (1.0.1f i486)
+        => Installing
+        => Installed
+      out
+    end
+
+    it 'supports packages beginning with http' do
+      allow(Trolley::CLI).to receive(:get).and_return(httpd_response)
+      output = capture(:stdout) { Trolley::CLI.start(['install', 'httpd']) }
+      output.should == <<-out.outdent
+        => Downloading httpd (2.2.25 i486)
         => Installing
         => Installed
       out

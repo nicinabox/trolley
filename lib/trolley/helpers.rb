@@ -15,7 +15,7 @@ module Trolley
 
     def url?(data)
       return unless data.is_a? String
-      /^http/ =~ data
+      /^http:\/\// =~ data
     end
 
     def details(package)
