@@ -8,7 +8,7 @@ Compatible with unRAID >5.0
 
 With curl
 
-    curl -sk http://git.io/8GviJQ | sh
+    curl -skL http://git.io/8GviJQ | sh
 
 With wget
 
