@@ -119,7 +119,8 @@ describe Trolley::CLI do
         "python-2.6.6-i486-1",
         "curl-7.20.1-i486-1",
         "trolley-0.1.12-noarch-unraid",
-        "openssh-5.9p1-i486-2_slack13.37"
+        "openssh-5.9p1-i486-2_slack13.37",
+        "libav-i486-rj"
       ]
       packages.each do |p|
         FileUtils.touch "/var/log/packages/#{p}"
@@ -131,6 +132,7 @@ describe Trolley::CLI do
       output = capture(:stdout) { Trolley::CLI.start(['list']) }
       output.should == <<-out.outdent
         curl     7.20.1
+        libav    i486
         openssh  5.9p1
         python   2.6.6
         ruby     1.9.3_p484
